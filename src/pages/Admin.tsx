@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabase";
-import { Link } from "react-router-dom";
+
 import "./Admin.css";
 
 const ROLES = ["frontend", "backend", "fullstack", "devops", "aiml"];
