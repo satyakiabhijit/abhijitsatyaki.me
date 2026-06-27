@@ -103,7 +103,7 @@ const Admin = () => {
   if (!session) {
     return (
       <div className="admin-container">
-        <Link to="/" className="back-link">← Back Home</Link>
+        <a href="/" className="back-link">← Back Home</a>
         <form onSubmit={handleLogin} className="admin-form">
           <h2>Admin Login</h2>
           {message && <p className="error">{message}</p>}
@@ -132,7 +132,7 @@ const Admin = () => {
   return (
     <div className="admin-container">
       <div className="admin-header">
-        <Link to="/" className="back-link">← Back Home</Link>
+        <a href="/" className="back-link">← Back Home</a>
         <div className="user-info">
           <span>{session.user.email}</span>
           <button onClick={handleLogout} className="logout-btn">Logout</button>

@@ -316,9 +316,9 @@ const Play = () => {
     <div className="play-page">
       {/* Header */}
       <div className="play-header">
-        <Link to="/" className="back-button" data-cursor="disable">
+        <a href="/" className="back-button" data-cursor="disable">
           ← Back to Home
-        </Link>
+        </a>
       </div>
 
       <div className="chess-container">
