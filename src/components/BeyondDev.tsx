@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { FaCamera, FaXmark, FaChevronLeft, FaChevronRight, FaMagnifyingGlassPlus } from "react-icons/fa6";
+import { MdOutlinePhotoCamera } from "react-icons/md";
+import { FaXmark, FaChevronLeft, FaChevronRight, FaMagnifyingGlassPlus } from "react-icons/fa6";
 import "./styles/BeyondDev.css";
 
 const photos = [
