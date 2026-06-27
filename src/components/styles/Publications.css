@@ -1,0 +1,172 @@
+.publications-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  place-items: center;
+  justify-content: center;
+  position: relative;
+  opacity: 1;
+  height: auto;
+  margin: auto;
+  margin-bottom: 100px;
+  padding: 100px 0px;
+}
+
+.publications-container {
+  width: 80%;
+  max-width: 1400px;
+}
+
+.publications-section h2 {
+  font-size: 70px;
+  line-height: 70px;
+  font-weight: 400;
+  text-align: center;
+  background: linear-gradient(0deg, #7f40ff, #ffffff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  margin-top: 50px;
+  margin-bottom: 90px;
+}
+
+.publications-section h2 > span {
+  font-family: "Geist", sans-serif;
+  font-weight: 300;
+}
+
+.publications-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.publication-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 40px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.3s ease, background 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.publication-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-5px);
+}
+
+.publication-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.publication-status {
+  background: rgba(127, 64, 255, 0.2);
+  color: #d29bff;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.publication-year {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 500;
+  font-family: "Geist", sans-serif;
+}
+
+.publication-title {
+  font-size: 24px;
+  line-height: 32px;
+  margin: 0 0 10px 0;
+  color: #fff;
+  font-weight: 500;
+}
+
+.publication-venue {
+  font-size: 16px;
+  color: #d29bff;
+  margin: 0 0 20px 0;
+  font-weight: 400;
+}
+
+.publication-desc {
+  font-size: 14px;
+  color: #aaa;
+  line-height: 24px;
+  margin: 0 0 30px 0;
+  font-weight: 300;
+  flex-grow: 1;
+}
+
+.publication-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.publication-tag {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ccc;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.publication-link {
+  display: inline-block;
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  border-bottom: 1px solid #7f40ff;
+  padding-bottom: 5px;
+  align-self: flex-start;
+  transition: opacity 0.2s ease;
+}
+
+.publication-link:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 1024px) {
+  .publications-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .publications-section h2 {
+    font-size: 50px;
+    line-height: 50px;
+  }
+  
+  .publication-title {
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .publications-section h2 {
+    font-size: 42px;
+    line-height: 44px;
+  }
+  
+  .publications-container {
+    width: 90%;
+  }
+  
+  .publication-card {
+    padding: 30px 20px;
+  }
+}

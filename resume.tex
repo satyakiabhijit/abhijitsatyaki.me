@@ -1,0 +1,154 @@
+\documentclass[letterpaper,9.5pt]{article}
+
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xurl}
+\usepackage{tabularx}
+\usepackage{multicol}
+\usepackage{xcolor}
+\usepackage{fontawesome5}
+
+\definecolor{cvblue}{HTML}{0E5484}
+\definecolor{black}{HTML}{130810}
+\definecolor{darkcolor}{HTML}{0F4539}
+\definecolor{SlateGrey}{HTML}{2E2E2E}
+\definecolor{LightGrey}{HTML}{666666}
+
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.2in}
+\addtolength{\topmargin}{-.92in}
+\addtolength{\textheight}{2.05in}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\normalsize\bfseries\color{darkcolor}
+}{}{0em}{}[\color{cvblue}\titlerule \vspace{0pt}]
+
+\pdfgentounicode=1
+
+\newcommand{\resumeItem}[1]{\item\small{#1}}
+
+\newcommand{\resumeSubheading}[4]{
+  \item
+  \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \textbf{\small\color{darkcolor}#1} & \textbf{\small #2} \\
+    \textit{\small\color{SlateGrey}#3} & \textit{\small\color{LightGrey}#4} \\
+  \end{tabular*}
+}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}, itemsep=2pt, parsep=0pt, topsep=1pt]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}\vspace{1pt}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=1.2em, itemsep=1pt, topsep=2pt, parsep=0pt]}
+\newcommand{\resumeItemListEnd}{\end{itemize}}
+
+\begin{document}
+
+%===== HEADER =====
+\begin{center}
+    {\LARGE \scshape \color{black} Abhijit Satyaki} \\ \vspace{2pt}
+    {\small\color{SlateGrey} Full Stack Developer \ $|$ \ MERN Stack \ $|$ \ Web Application Specialist} \\ \vspace{2pt}
+    \small
+    \href{tel:+916297575275}{\color{cvblue}\faPhone\ +91-6297575275} ~$\cdot$~
+    \href{mailto:abhijitsatyaki29@gmail.com}{\color{cvblue}\faEnvelope\ abhijitsatyaki29@gmail.com} ~$\cdot$~
+    \href{https://linkedin.com/in/abhijitsatyaki}{\color{cvblue}\faLinkedin\ abhijitsatyaki} ~$\cdot$~
+    \href{https://github.com/satyakiabhijit}{\color{cvblue}\faGithub\ satyakiabhijit} ~$\cdot$~
+    \href{https://abhijitsatyaki.42web.io/}{\color{cvblue}\faGlobe\ Portfolio}
+\end{center}
+
+%===== SUMMARY =====
+\section{Summary}
+\small Results-driven Full Stack Developer skilled in MERN stack, REST APIs, and responsive frontend development. Track record spanning 5 internships, 15+ deployed projects, and 3+ peer-reviewed publications (IEEE + SCOPUS). Builds end-to-end solutions — from booking platforms and AI-powered tools to browser extensions with real users.
+
+%===== TECHNICAL SKILLS =====
+\section{Technical Skills}
+\begin{tabular}{@{} l l @{}}
+\small\textbf{Languages \& Frontend:} & \small JavaScript (ES6+), Python, HTML5, CSS3, C++, React.js, Tailwind CSS, Bootstrap \\[2pt]
+\small\textbf{Backend \& Databases:}  & \small Node.js, Express.js, REST APIs, JWT, MongoDB, MySQL, MVC Architecture \\[2pt]
+\small\textbf{Tools \& Other:}        & \small Git, Docker, Postman, Netlify, IoMT, ZKP, MHT, BLE \\
+\end{tabular}
+
+%===== WORK EXPERIENCE =====
+\section{Work Experience}
+\resumeSubHeadingListStart
+
+  \resumeSubheading{EduLinkUp}{Nov 2025 -- Present}{Founding Member \& Software Developer \& QA Engineer}{Remote}
+  \resumeItemListStart
+    \resumeItem{Built full stack features (React.js, Node.js, MongoDB); end-to-end testing and iterative releases with cross-functional teams.}
+  \resumeItemListEnd
+
+  \resumeSubheading{Pinnacle Labs}{Jul -- Aug 2025}{Web Development Intern}{Remote}
+  \resumeItemListStart
+    \resumeItem{Developed and optimized web application components using modern frontend frameworks and best practices.}
+  \resumeItemListEnd
+
+  \resumeSubheading{Haldia Institute of Technology}{Jun -- Jul 2025}{Research Intern -- Cybersecurity}{Haldia, West Bengal}
+  \resumeItemListStart
+    \resumeItem{Built POCT security framework (ZKP + MHT) for IoMT data protection; contributed to accepted SCOPUS-indexed publication.}
+  \resumeItemListEnd
+
+  \resumeSubheading{Tech \& Talent}{Sep -- Oct 2024}{Web Development Intern}{Remote}
+  \resumeItemListStart
+    \resumeItem{Customized WordPress themes and plugins; improved site performance and UX via frontend modifications.}
+  \resumeItemListEnd
+
+  \resumeSubheading{Haldia Institute of Technology}{Jun -- Aug 2024}{Research Intern -- IoMT Systems}{Haldia, West Bengal}
+  \resumeItemListStart
+    \resumeItem{Optimized IoMT data pipeline: 98\%+ reliability, 8.9\% energy reduction; published in IEEE proceedings at IIT Rourkela.}
+  \resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+%===== PROJECTS =====
+\section{Projects}
+\resumeSubHeadingListStart
+
+  \resumeSubheading{Kairo -- Cross-Browser AI Context Manager}{2025}{JavaScript, Chrome Extension API (MV3) \ $|$ \ \href{https://github.com/satyakiabhijit/Kairo}{\color{cvblue}\faGithub\ satyakiabhijit/Kairo}}{}
+  \resumeItemListStart
+    \resumeItem{Cross-browser extension (MV3) saving AI chat context as reusable Capsules via content scripts, service workers, and messaging.}
+  \resumeItemListEnd
+
+  \resumeSubheading{Resumelyze -- AI-Powered ATS Resume Analyzer}{2025}{Next.js 14, TypeScript, Gemini AI, Supabase \ $|$ \ \href{https://github.com/satyakiabhijit/resumelyze}{\color{cvblue}\faGithub\ satyakiabhijit/resumelyze}}{}
+  \resumeItemListStart
+    \resumeItem{Serverless ATS analyzer: TF-IDF, Gemini AI, and Hybrid modes for PDF/DOCX/TXT; Vercel cold-start cut from 5s to under 1s.}
+  \resumeItemListEnd
+
+  \resumeSubheading{BookOnGo -- Booking Management System}{2024}{MERN Stack \ $|$ \ \href{https://bookongo.dev}{\color{cvblue}\faGlobe\ bookongo.dev}}{}
+  \resumeItemListStart
+    \resumeItem{Full stack booking platform: JWT auth, payment integration, admin dashboard, real-time availability via Express.js API and React.}
+  \resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+%===== EDUCATION =====
+\section{Education}
+\vspace{2pt}
+\begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
+  \small\textbf{\color{darkcolor}Jalpaiguri Government Engineering College} & \small\textbf{2023 -- Present} \\
+  \small\textit{B.Tech in Information Technology} & \small\textit{CGPA: 7.3 / 10} \\[2pt]
+  \small\textbf{\color{darkcolor}Rajganj Government Polytechnic} & \small\textbf{2020 -- 2022} \\
+  \small\textit{Diploma in Civil Engineering} & \small\textit{OGPA: 7.9 / 10} \\
+\end{tabular*}
+
+%===== PUBLICATIONS =====
+\section{Publications}
+\vspace{2pt}
+\noindent\small\textbf{Implementing Secure BLE Signal Transmission using Antenna Design} \hfill \textbf{2025} \\
+\small\textit{Published -- SCOPUS-Indexed Book Chapter, MICRO 2025} \hfill \href{https://actsoft.org/micro2025/}{\color{cvblue}Book link} \\[2pt]
+\noindent\small\textbf{Optimizing Sensory Data Accumulation in IoMT Framework} \hfill \textbf{2024} \\
+\small\textit{Published -- IEEE, IIT Rourkela, India} \hfill \href{https://ieeexplore.ieee.org/document/10957180}{\color{cvblue}DOI: 10.1109/ISED63599.2024.10957180}
+
+%===== CERTIFICATIONS =====
+\section{Certifications}
+\vspace{2pt}
+\small\textbf{Machine Learning Specialization} -- Stanford University (Coursera), 2025 \\[1pt]
+\small\textbf{JavaScript Algorithms \& Data Structures} -- freeCodeCamp, 2024 \\[1pt]
+\small\textbf{Responsive Web Design} -- freeCodeCamp, 2023
+
+\end{document}
