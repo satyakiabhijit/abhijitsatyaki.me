@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
 import { gsap } from "gsap";
@@ -9,6 +9,12 @@ gsap.registerPlugin(ScrollTrigger);
 export let lenis: Lenis | null = null;
 
 const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   useEffect(() => {
     // Initialize Lenis smooth scroll
     lenis = new Lenis({
@@ -22,8 +28,13 @@ const Navbar = () => {
       infinite: false,
     });
 
-    // Start paused
+    // Start paused (will be started by initialFX after loading)
     lenis.stop();
+    // In case of Hot Module Replacement (HMR) during dev, initialFX won't run again.
+    // If the main content is already active, we can start Lenis immediately.
+    if (document.querySelector('.main-active')) {
+      lenis.start();
+    }
 
     // Handle smooth scroll animation frame
     function raf(time: number) {
@@ -63,6 +74,23 @@ const Navbar = () => {
       lenis?.destroy();
     };
   }, []);
+
+  // Prevent scrolling when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+      lenis?.stop();
+    } else {
+      document.body.style.overflow = "";
+      if (document.querySelector('.main-active')) {
+        lenis?.start();
+      }
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpen]);
+
   return (
     <>
       <div className="header">
@@ -78,39 +106,46 @@ const Navbar = () => {
             abhijitsatyaki29@gmail.com
           </a>
         </div>
-        <ul>
+
+        <div className={`hamburger ${isMenuOpen ? "active" : ""}`} onClick={toggleMenu}>
+          <span className="bar"></span>
+          <span className="bar"></span>
+          <span className="bar"></span>
+        </div>
+
+        <ul className={isMenuOpen ? "nav-menu active" : "nav-menu"}>
           <li>
-            <a data-href="#about" href="#about">
+            <a data-href="#about" href="#about" onClick={() => setIsMenuOpen(false)}>
               <HoverLinks text="ABOUT" />
             </a>
           </li>
           <li>
-            <a data-href="#experience" href="#experience">
+            <a data-href="#experience" href="#experience" onClick={() => setIsMenuOpen(false)}>
               <HoverLinks text="EXPERIENCE" />
             </a>
           </li>
           <li>
-            <a data-href="#education" href="#education">
+            <a data-href="#education" href="#education" onClick={() => setIsMenuOpen(false)}>
               <HoverLinks text="EDUCATION" />
             </a>
           </li>
           <li>
-            <a data-href="#publications" href="#publications">
+            <a data-href="#publications" href="#publications" onClick={() => setIsMenuOpen(false)}>
               <HoverLinks text="PUBLICATIONS" />
             </a>
           </li>
           <li>
-            <a data-href="#work" href="#work">
+            <a data-href="#work" href="#work" onClick={() => setIsMenuOpen(false)}>
               <HoverLinks text="WORK" />
             </a>
           </li>
           <li>
-            <a data-href="#beyond-dev" href="#beyond-dev">
+            <a data-href="#beyond-dev" href="#beyond-dev" onClick={() => setIsMenuOpen(false)}>
               <HoverLinks text="BEYOND DEV" />
             </a>
           </li>
           <li>
-            <a data-href="#contact" href="#contact">
+            <a data-href="#contact" href="#contact" onClick={() => setIsMenuOpen(false)}>
               <HoverLinks text="CONTACT" />
             </a>
           </li>
