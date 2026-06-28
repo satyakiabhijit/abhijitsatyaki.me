@@ -3,7 +3,9 @@
 A modern, high-performance **3D developer portfolio website** built with **React**, **TypeScript**, **Three.js**, **GSAP**, and **WebGL**.
 
 > Live Preview: [https://abhijitsatyaki.me](https://abhijitsatyaki.me)
+### Desktop Version
 <img width="1901" height="911" alt="image" src="https://github.com/user-attachments/assets/26f1f6cf-b27c-4499-b437-dc0723625a3a" />
+### Mobile Version
 <img width="463" height="812" alt="image" src="https://github.com/user-attachments/assets/9bb054b5-4101-4187-9a62-23f3fef9718b" />
 
 
