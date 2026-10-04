@@ -129,29 +129,29 @@ export const config = {
         {
             id: "ka-band-antenna",
             title: "A High-Performance, Ultra-Wideband Microstrip Patch Antenna with Near-Ideal Impedance Matching for 5G Ka-Band Applications Operating at 26 GHz Resonating Frequency",
-            venue: "Research Publication",
+            venue: "Submitted Research",
             year: "2025",
             description: "Presents a compact, high-performance microstrip patch antenna for 5G Ka-band applications at 26 GHz using patch slotting, inset feeding, and a low-loss Rogers 92 mL substrate. CST Studio Suite 2024 simulations achieved 26 GHz resonance, approximately -39.1 dB return loss, VSWR of 1.02, and 5.731 GHz bandwidth.",
             tags: ["5G", "Ka-Band", "Microstrip Antenna", "26 GHz", "CST"],
-            status: "Published"
+            status: "Submitted"
         },
         {
             id: "xai-s11",
             title: "Explainable Machine Learning-Based Prediction of S11 for Slotted Patch Antenna Optimization Using Extra Trees Regressor",
-            venue: "Research Publication",
+            venue: "Submitted Research",
             year: "2025",
             description: "Proposes an explainable machine learning framework for predicting S11 in slotted patch antennas. Using 1,266 samples and engineered antenna features, the Extra Trees Regressor achieved R² = 0.9967, RMSE = 0.1696, and MAE = 0.0366, with SHAP identifying frequency, patch aspect ratio, and slot area as dominant features.",
             tags: ["Machine Learning", "XAI", "Antenna Design", "S11", "SHAP"],
-            status: "Published"
+            status: "Submitted"
         },
         {
             id: "quantum-edge-ai",
             title: "Foundation of Quantum Computing and Edge AI in Healthcare",
-            venue: "Scrivener Publishing",
+            venue: "Submitted Manuscript",
             year: "2025",
             description: "Examines the convergence of quantum computing, artificial intelligence, and healthcare, covering quantum machine learning for drug discovery, genomics, diagnostic imaging, anomaly detection, and quantum cryptography for patient-data security, alongside hardware, data coherence, and ethical challenges.",
             tags: ["Quantum Computing", "Edge AI", "Healthcare", "Quantum ML", "Cybersecurity"],
-            status: "Published"
+            status: "Submitted"
         }
     ],
     projects: [
