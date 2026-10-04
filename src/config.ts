@@ -105,23 +105,52 @@ export const config = {
     publications: [
         {
             id: "ble-antenna",
-            title: "Implementing Secure BLE Signal Transmission using Antenna Design",
-            venue: "SCOPUS-indexed Book Chapter • Handbook of Security, Quantum Computing and IoT",
-            year: "2025",
-            description: "Accepted in a SCOPUS-indexed book chapter focused on secure Bluetooth Low Energy signal transmission using antenna design for improved robustness in IoT environments.",
-            tags: ["Bluetooth LE", "Antenna Design", "Security", "IoT", "Quantum Computing"],
-            link: "https://www.routledge.com/Handbook-of-Security-Quantum-Computing-and-Internet-of-Things-IoT/Jain-Sayal-Bijalwan/p/book/9781032947013",
+            title: "Implementing Secure BLE Signal Transmission through Antenna Design Techniques in Wearable IoT Devices",
+            venue: "CRC Press (Taylor & Francis Group)",
+            year: "2026",
+            date: "February 9, 2026",
+            description: "Co-authored research presented at the 12th International Conference on Microelectronics, Circuits and Systems (Micro2025), hosted by Jalpaiguri Government Engineering College. The work presents a cross-layer approach to enhancing BLE security in wearable IoT devices using antenna design techniques to reduce signal interception risks while maintaining system performance.",
+            tags: ["Bluetooth LE", "Antenna Design", "Wearable IoT", "Security", "IoT"],
+            link: "https://www.taylorfrancis.com/chapters/edit/10.1201/9781003581673-9/implementing-secure-ble-signal-transmission-antenna-design-techniques-wearable-iot-devices-aditya-kumar-samanta-sagnik-chakraborty-abhijit-satyaki-rajesh-dey-monika-singh",
             status: "Published"
         },
         {
             id: "iomt-optimization",
-            title: "Optimizing Sensory Data Accumulation in IoMT Framework",
-            venue: "IEEE Conference • IIT Rourkela, India",
-            year: "2024",
+            title: "Optimizing Sensory Data Accumulation in IoMT Framework Using Energy-Efficient Compressed Sensing Techniques",
+            venue: "IEEE",
+            year: "2025",
+            date: "April 15, 2025",
             doi: "10.1109/ISED63599.2024.10957180",
-            description: "Presented at IEEE conference held at IIT Rourkela, focusing on improving IoMT data collection efficiency through optimized sensory data accumulation and compressed sensing techniques.",
-            tags: ["IoMT", "Healthcare", "Data Analytics", "Machine Learning", "IEEE"],
-            link: "https://ieeexplore.ieee.org/document/10957180/",
+            description: "Proposes an energy-efficient data accumulation method for IoMT networks using compressed sensing and threshold-based cloud transmission. Experiments achieved over 98% data reconstruction reliability and up to 8.91% lower energy usage than traditional methods.",
+            tags: ["IoMT", "Healthcare", "Compressed Sensing", "Energy Efficiency", "IEEE"],
+            link: "https://ieeexplore.ieee.org/abstract/document/10957180",
+            status: "Published"
+        },
+        {
+            id: "ka-band-antenna",
+            title: "A High-Performance, Ultra-Wideband Microstrip Patch Antenna with Near-Ideal Impedance Matching for 5G Ka-Band Applications Operating at 26 GHz Resonating Frequency",
+            venue: "Research Publication",
+            year: "2025",
+            description: "Presents a compact, high-performance microstrip patch antenna for 5G Ka-band applications at 26 GHz using patch slotting, inset feeding, and a low-loss Rogers 92 mL substrate. CST Studio Suite 2024 simulations achieved 26 GHz resonance, approximately -39.1 dB return loss, VSWR of 1.02, and 5.731 GHz bandwidth.",
+            tags: ["5G", "Ka-Band", "Microstrip Antenna", "26 GHz", "CST"],
+            status: "Published"
+        },
+        {
+            id: "xai-s11",
+            title: "Explainable Machine Learning-Based Prediction of S11 for Slotted Patch Antenna Optimization Using Extra Trees Regressor",
+            venue: "Research Publication",
+            year: "2025",
+            description: "Proposes an explainable machine learning framework for predicting S11 in slotted patch antennas. Using 1,266 samples and engineered antenna features, the Extra Trees Regressor achieved R² = 0.9967, RMSE = 0.1696, and MAE = 0.0366, with SHAP identifying frequency, patch aspect ratio, and slot area as dominant features.",
+            tags: ["Machine Learning", "XAI", "Antenna Design", "S11", "SHAP"],
+            status: "Published"
+        },
+        {
+            id: "quantum-edge-ai",
+            title: "Foundation of Quantum Computing and Edge AI in Healthcare",
+            venue: "Scrivener Publishing",
+            year: "2025",
+            description: "Examines the convergence of quantum computing, artificial intelligence, and healthcare, covering quantum machine learning for drug discovery, genomics, diagnostic imaging, anomaly detection, and quantum cryptography for patient-data security, alongside hardware, data coherence, and ethical challenges.",
+            tags: ["Quantum Computing", "Edge AI", "Healthcare", "Quantum ML", "Cybersecurity"],
             status: "Published"
         }
     ],
