@@ -1,0 +1,37 @@
+# Abhijit Satyaki
+
+> Personal portfolio of Abhijit Satyaki, a Full Stack Developer and research co-author.
+
+Website: https://abhijitsatyaki.me/
+LinkedIn: https://www.linkedin.com/in/abhijitsatyaki/
+GitHub: https://github.com/satyakiabhijit
+
+## Professional profile
+
+Abhijit Satyaki is a Full Stack Developer skilled in the MERN stack, REST APIs, TypeScript, React, Node.js, MongoDB, and responsive frontend development. His research interests include IoMT security, wearable IoT, BLE security, antenna design, explainable machine learning, quantum computing, and Edge AI.
+
+## Publications
+
+1. Implementing Secure BLE Signal Transmission through Antenna Design Techniques in Wearable IoT Devices
+   - Publisher: CRC Press (Taylor & Francis Group)
+   - Date: February 9, 2026
+   - Link: https://www.taylorfrancis.com/chapters/edit/10.1201/9781003581673-9/implementing-secure-ble-signal-transmission-antenna-design-techniques-wearable-iot-devices-aditya-kumar-samanta-sagnik-chakraborty-abhijit-satyaki-rajesh-dey-monika-singh
+
+2. Optimizing Sensory Data Accumulation in IoMT Framework Using Energy-Efficient Compressed Sensing Techniques
+   - Publisher: IEEE
+   - Date: April 15, 2025
+   - DOI: https://doi.org/10.1109/ISED63599.2024.10957180
+   - Link: https://ieeexplore.ieee.org/abstract/document/10957180
+
+3. A High-Performance, Ultra-Wideband Microstrip Patch Antenna with Near-Ideal Impedance Matching for 5G Ka-Band Applications Operating at 26 GHz Resonating Frequency
+
+4. Explainable Machine Learning-Based Prediction of S11 for Slotted Patch Antenna Optimization Using Extra Trees Regressor
+
+5. Foundation of Quantum Computing and Edge AI in Healthcare
+   - Publisher: Scrivener Publishing
+
+## Projects
+
+The portfolio also showcases software projects spanning browser extensions, AI/full-stack applications, booking platforms, gaming, cybersecurity, education, and web applications.
+
+For current project details and professional information, use the main website and linked profiles above.
