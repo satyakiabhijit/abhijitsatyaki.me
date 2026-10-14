@@ -1,6 +1,6 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Html, ContactShadows, Environment } from "@react-three/drei";
+import { Html, ContactShadows } from "@react-three/drei";
 import * as THREE from "three";
 import { config } from "../config";
 import "./PortfolioWorld.css";
@@ -54,7 +54,6 @@ function WorldScene({ onSelect, move }: { onSelect: (d: Destination) => void; mo
   return <Canvas shadows dpr={[1, 1.5]} camera={{ position: [15, 17, 23], fov: 42 }} gl={{ antialias: true, powerPreference: "high-performance" }} onCreated={({ gl }) => { gl.setClearColor("#b9c7c5"); }} >
     <fog attach="fog" args={["#b9c7c5", 26, 58]} />
     <ambientLight intensity={1.25} /><directionalLight castShadow position={[8, 14, 7]} intensity={2.1} shadow-mapSize={[1024, 1024]} />
-    <Environment preset="park" />
     <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow position={[0, -0.14, 0]}><planeGeometry args={[200, 200]} /><meshStandardMaterial color="#a8bba8" /></mesh>
     <mesh receiveShadow position={[0, 0, 0]}><cylinderGeometry args={[22, 24, 0.55, 12]} /><meshStandardMaterial color="#a5c3b0" flatShading /></mesh>
     <mesh receiveShadow position={[0, 0.02, 0]}><cylinderGeometry args={[18.7, 20, 0.14, 12]} /><meshStandardMaterial color="#d7d2c8" flatShading /></mesh>
