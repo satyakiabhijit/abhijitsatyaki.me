@@ -32,9 +32,12 @@ function Car({ move }: { move: { forward: number; turn: number } }) {
     velocity.current = THREE.MathUtils.damp(velocity.current, move.forward, 2.8, d);
     ref.current.rotation.y -= move.turn * d * (0.65 + Math.abs(velocity.current) * 0.6);
     const direction = new THREE.Vector3(Math.sin(ref.current.rotation.y), 0, Math.cos(ref.current.rotation.y));
-    ref.current.position.addScaledVector(direction, velocity.current * d * 7);
-    ref.current.position.x = THREE.MathUtils.clamp(ref.current.position.x, -17, 17);
-    ref.current.position.z = THREE.MathUtils.clamp(ref.current.position.z, -19, 17);
+    const next = ref.current.position.clone().addScaledVector(direction, velocity.current * d * 7);
+    next.x = THREE.MathUtils.clamp(next.x, -17, 17);
+    next.z = THREE.MathUtils.clamp(next.z, -19, 17);
+    const landmarkObstacles: [number, number, number][] = [[0, -8, 2.1], [8, -1, 2.1], [-8, 0, 2.1], [8, 8, 2.1], [-8, 8, 2.1], [-1, 13, 2.1], [1, -15, 2.1]];
+    const blocked = landmarkObstacles.some(([x, z, radius]) => Math.hypot(next.x - x, next.z - z) < radius);
+    if (!blocked) ref.current.position.copy(next);
   });
   return <group ref={ref} position={[0, 0.3, 3]}><mesh castShadow position={[0, 0.28, 0]}><boxGeometry args={[1.25, 0.45, 2.1]} /><meshStandardMaterial color="#c2a4ff" metalness={0.15} roughness={0.42} /></mesh><mesh castShadow position={[0, 0.62, -0.12]}><boxGeometry args={[0.86, 0.42, 0.95]} /><meshStandardMaterial color="#dfe7f2" metalness={0.2} roughness={0.22} /></mesh>{[-0.68, 0.68].map(x => [-0.62, 0.62].map(z => <mesh key={x + ":" + z} position={[x, 0.1, z]} rotation={[0, 0, Math.PI / 2]}><cylinderGeometry args={[0.22, 0.22, 0.13, 12]} /><meshStandardMaterial color="#24222b" /></mesh>))}</group>;
 }
