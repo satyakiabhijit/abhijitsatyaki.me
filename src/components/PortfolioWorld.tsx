@@ -51,7 +51,7 @@ function Landmark({ destination, onSelect }: { destination: Destination; onSelec
 
 function WorldScene({ onSelect, move }: { onSelect: (d: Destination) => void; move: { forward: number; turn: number } }) {
   const destinations = useMemo(makeDestinations, []);
-  return <Canvas shadows dpr={[1, 1.5]} camera={{ position: [15, 17, 23], fov: 42 }} gl={{ antialias: true, powerPreference: "high-performance" }} onCreated={({ gl }) => { gl.setClearColor("#b9c7c5"); }} >
+  return <Canvas shadows dpr={[1, 1.5]} camera={{ position: [15, 17, 23], fov: 42 }} gl={{ antialias: true, powerPreference: "high-performance" }} onCreated={({ gl }) => { gl.setClearColor("#b9c7c5"); }} fallback={<div className="world-webgl-fallback"><h2>3D mode is unavailable here.</h2><p>You can still explore the full portfolio in the normal view.</p><a href="/">Return to portfolio</a></div>}>
     <fog attach="fog" args={["#b9c7c5", 26, 58]} />
     <ambientLight intensity={1.25} /><directionalLight castShadow position={[8, 14, 7]} intensity={2.1} shadow-mapSize={[1024, 1024]} />
     <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow position={[0, -0.14, 0]}><planeGeometry args={[200, 200]} /><meshStandardMaterial color="#a8bba8" /></mesh>
