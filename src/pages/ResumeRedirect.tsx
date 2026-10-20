@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { supabase } from "../utils/supabase";
 
 const ROLES = ["frontend", "backend", "fullstack", "devops", "aiml"];
 
@@ -18,20 +17,22 @@ const ResumeRedirect = () => {
       return;
     }
 
-    const fileName = `${role}-resume.pdf`;
-    
-    // Get the public URL for the file
-    const { data } = supabase.storage
-      .from("resumes")
-      .getPublicUrl(fileName);
+    fetch("/api/resumes")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to check resumes");
+        return res.json();
+      })
+      .then((data) => {
+        if (data.availableRoles && data.availableRoles.includes(role)) {
+          setPdfUrl(`/api/resumes?role=${role}&t=${Date.now()}`);
+        } else {
+          setError("Resume not found.");
+        }
+      })
+      .catch(() => {
+        setPdfUrl(`/api/resumes?role=${role}&t=${Date.now()}`);
+      });
 
-    if (data && data.publicUrl) {
-      // Append a timestamp to bypass browser caching of the redirect
-      setPdfUrl(`${data.publicUrl}?t=${new Date().getTime()}`);
-    } else {
-      setError("Resume not found.");
-    }
-    
     return () => {
       document.body.style.overflow = "auto";
     };

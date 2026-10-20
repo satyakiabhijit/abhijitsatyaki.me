@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { supabase } from "../utils/supabase";
 
 import "./Admin.css";
 
@@ -21,50 +20,68 @@ const Admin = () => {
   useEffect(() => {
     document.body.style.overflowY = "auto";
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      if (session) fetchFiles();
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      if (session) fetchFiles();
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
+    const token = localStorage.getItem("admin_token");
+    if (token) {
+      fetch("/api/auth", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.authenticated) {
+            setSession({ user: data.user });
+            fetchFiles();
+          } else {
+            localStorage.removeItem("admin_token");
+          }
+        })
+        .catch(() => {
+          localStorage.removeItem("admin_token");
+        });
+    }
   }, []);
 
   const fetchFiles = async () => {
-    const { data, error } = await supabase.storage.from("resumes").list();
-    if (error) {
-      console.error("Error fetching files:", error);
-      return;
+    try {
+      const res = await fetch("/api/resumes");
+      const data = await res.json();
+      if (data.availableRoles) {
+        setAvailableResumes(data.availableRoles);
+      }
+    } catch (err) {
+      console.error("Error fetching files:", err);
     }
-    const uploadedRoles = data
-      .map((f) => f.name)
-      .filter((name) => name.endsWith("-resume.pdf"))
-      .map((name) => name.replace("-resume.pdf", ""));
-    setAvailableResumes(uploadedRoles);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) setMessage(error.message);
-    setLoading(false);
+
+    try {
+      const res = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setMessage(data.error || "Login failed");
+      } else {
+        localStorage.setItem("admin_token", data.token);
+        setSession({ user: data.user });
+        fetchFiles();
+      }
+    } catch (err: any) {
+      setMessage(err.message || "Network error");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    localStorage.removeItem("admin_token");
+    setSession(null);
   };
 
   const handleUpload = async (e: React.FormEvent) => {
@@ -74,23 +91,59 @@ const Admin = () => {
     setUploading(true);
     setMessage("");
 
-    const fileName = `${selectedRole}-resume.pdf`;
-
-    const { error } = await supabase.storage
-      .from("resumes")
-      .upload(fileName, file, {
-        cacheControl: "3600",
-        upsert: true,
-      });
-
-    if (error) {
-      setMessage(`Error uploading: ${error.message}`);
-    } else {
-      setMessage(`Successfully uploaded ${fileName}`);
-      setFile(null);
-      fetchFiles(); // Refresh the list
+    const token = localStorage.getItem("admin_token");
+    if (!token) {
+      setMessage("You must be logged in to upload.");
+      setUploading(false);
+      return;
     }
-    setUploading(false);
+
+    try {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const base64Data = (reader.result as string).split(",")[1];
+          const fileName = `${selectedRole}-resume.pdf`;
+
+          const res = await fetch("/api/resumes", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              role: selectedRole,
+              filename: fileName,
+              mime_type: file.type || "application/pdf",
+              data_base64: base64Data,
+            }),
+          });
+
+          const data = await res.json();
+          if (!res.ok) {
+            setMessage(`Error uploading: ${data.error || "Failed"}`);
+          } else {
+            setMessage(`Successfully uploaded ${fileName}`);
+            setFile(null);
+            fetchFiles(); // Refresh the list
+          }
+        } catch (uploadErr: any) {
+          setMessage(`Error uploading: ${uploadErr.message}`);
+        } finally {
+          setUploading(false);
+        }
+      };
+
+      reader.onerror = () => {
+        setMessage("Error reading file.");
+        setUploading(false);
+      };
+
+      reader.readAsDataURL(file);
+    } catch (err: any) {
+      setMessage(`Error: ${err.message}`);
+      setUploading(false);
+    }
   };
 
   const handleCopy = (role: string) => {

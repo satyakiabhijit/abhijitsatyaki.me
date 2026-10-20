@@ -11,6 +11,7 @@ const MyWorks = lazy(() => import("./pages/MyWorks"));
 const Play = lazy(() => import("./pages/Play"));
 const Admin = lazy(() => import("./pages/Admin"));
 const ResumeRedirect = lazy(() => import("./pages/ResumeRedirect"));
+const BentoPortfolio = lazy(() => import("./pages/BentoPortfolio"));
 import { LoadingProvider } from "./context/LoadingProvider";
 
 const App = () => {
@@ -60,6 +61,14 @@ const App = () => {
           element={
             <Suspense fallback={<div>Loading...</div>}>
               <ResumeRedirect />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/bento"
+          element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <BentoPortfolio />
             </Suspense>
           }
         />
