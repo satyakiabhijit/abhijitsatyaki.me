@@ -188,6 +188,13 @@ export async function validateSession(
   `;
   if (!rows || rows.length === 0) return null;
 
+  // Extend session by 7 days so active sessions never unexpectedly expire
+  await sql`
+    UPDATE admin_sessions
+    SET expires_at = NOW() + INTERVAL '7 days'
+    WHERE token = ${token}
+  `.catch(() => {});
+
   const row = rows[0] as AdminUser;
   return { ...row, password_hash: "" };
 }

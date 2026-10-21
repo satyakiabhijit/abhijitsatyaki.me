@@ -17,6 +17,7 @@ const PRESET_SECTIONS = [
 
 export default function Admin() {
   const [session, setSession] = useState<{ email: string } | null>(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -126,21 +127,51 @@ export default function Admin() {
     document.body.style.overflowY = "auto";
 
     const token = localStorage.getItem("admin_token");
-    if (!token) return;
+    const savedUser = localStorage.getItem("admin_user");
+
+    if (!token) {
+      setCheckingAuth(false);
+      return;
+    }
+
+    // Immediately restore cached session so page refreshes never flash login
+    if (savedUser) {
+      try {
+        setSession(JSON.parse(savedUser));
+      } catch {
+        // ignore parse error
+      }
+    }
 
     fetch("/api/admin/auth", { headers: { Authorization: `Bearer ${token}` } })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.authenticated) {
+      .then(async (res) => {
+        if (res.status === 401) {
+          localStorage.removeItem("admin_token");
+          localStorage.removeItem("admin_user");
+          setSession(null);
+          return;
+        }
+        if (!res.ok) {
+          // On server-side transient errors, do not log the user out
+          return;
+        }
+        const data = await res.json();
+        if (data.authenticated && data.user) {
           setSession(data.user);
+          localStorage.setItem("admin_user", JSON.stringify(data.user));
           fetchFiles();
           fetchBeyondDevItems();
         } else {
           localStorage.removeItem("admin_token");
+          localStorage.removeItem("admin_user");
+          setSession(null);
         }
       })
-      .catch(() => {
-        localStorage.removeItem("admin_token");
+      .catch((err) => {
+        console.warn("Could not reach auth server, keeping local session:", err);
+      })
+      .finally(() => {
+        setCheckingAuth(false);
       });
   }, [fetchFiles, fetchBeyondDevItems]);
 
@@ -162,6 +193,7 @@ export default function Admin() {
         setMessageType("error");
       } else {
         localStorage.setItem("admin_token", data.token);
+        localStorage.setItem("admin_user", JSON.stringify(data.user));
         setSession(data.user);
         fetchFiles();
         fetchBeyondDevItems();
@@ -190,6 +222,7 @@ export default function Admin() {
       }
     }
     localStorage.removeItem("admin_token");
+    localStorage.removeItem("admin_user");
     setSession(null);
     setAvailableResumes([]);
     setDefaultRole(null);
@@ -439,6 +472,17 @@ export default function Admin() {
       notify("Error deleting item", "error");
     }
   };
+
+  if (checkingAuth && !session) {
+    return (
+      <div className="flex min-h-[75vh] w-full items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
+          <p className="text-xs font-medium text-text-secondary">Verifying session...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!session) {
     return (
