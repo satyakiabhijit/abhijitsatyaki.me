@@ -20,13 +20,13 @@ export default function ContactPage() {
           <GridWrapper>
             <div className="mx-auto max-w-2xl text-center">
               <span className="mb-3 inline-block rounded-full border border-indigo-500/20 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-400">
-                Let's Connect
+                Let&apos;s Connect
               </span>
               <h1 className="text-4xl font-medium leading-tight tracking-tighter text-text-primary md:text-6xl md:leading-[64px]">
                 Say hello or pitch an opportunity.
               </h1>
               <p className="mt-4 text-base text-gray-400 sm:text-lg">
-                I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
+                I&apos;m always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
               </p>
             </div>
           </GridWrapper>

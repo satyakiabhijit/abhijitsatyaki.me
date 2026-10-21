@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import nodemailer from "nodemailer";
+import nodemailer, { type Transporter } from "nodemailer";
 import { sql } from "./db";
 
 const CAPTCHA_SECRET = process.env.CAPTCHA_SECRET || "abhijit-portfolio-captcha-secret-key-2026";
@@ -191,7 +191,7 @@ export async function sendContactEmail(data: {
   }
 
   try {
-    let transporter: nodemailer.Transporter;
+    let transporter: Transporter;
 
     if (gmailUser && gmailPass) {
       transporter = nodemailer.createTransport({

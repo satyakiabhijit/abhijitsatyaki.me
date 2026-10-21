@@ -55,19 +55,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function fetchAndSortChangelogEntrees(): Changelog[] {
-  try {
-    const allChangelogItems = changelogItems;
-    return allChangelogItems
-      .filter((item) => !item.draft)
-      .sort(
-        (a, b) =>
-          new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
-      );
-  } catch (error) {
-    notFound();
-  }
-}
 
 export function fetchAndSortBlogPosts(): Blog[] {
   try {
@@ -117,20 +104,6 @@ export function getRelatedBlogPosts(
   );
 
   return [...sortedByRelevance, ...remainingPosts].slice(0, maxResults);
-}
-
-export async function fetchAndSortChangelogPosts(): Promise<Changelog[]> {
-  try {
-    const allChangelogItems = await changelogItems;
-    return allChangelogItems
-      .filter((item) => !item.draft)
-      .sort(
-        (a, b) =>
-          new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
-      );
-  } catch (error) {
-    notFound();
-  }
 }
 
 export function extractUniqueBlogCategories(posts: Blog[]): Set<string> {

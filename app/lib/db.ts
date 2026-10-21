@@ -1,10 +1,13 @@
 import { neon } from "@neondatabase/serverless";
 
-const dbUrl =
-  process.env.DATABASE_URL ||
-  "postgresql://neondb_owner:npg_aXiAe1JYDGl7@ep-winter-sky-b4m5czni-pooler.c-6.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require";
+const dbUrl = process.env.DATABASE_URL;
 
-export const sql = neon(dbUrl);
+export const sql = dbUrl
+  ? neon(dbUrl)
+  : (((strings: TemplateStringsArray | string, ...values: any[]) => {
+      console.warn("DATABASE_URL environment variable is not configured.");
+      return Promise.resolve([]);
+    }) as any);
 
 export interface CommunityMessage {
   id: string;

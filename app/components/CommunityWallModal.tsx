@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import createSupabaseServerClient from "../lib/supabase/server";
 import { createCommunityMessage } from "../lib/db";
 import { CreateCommunityNoteBuilder } from "./CreateCommunityNoteBuilder";
 
@@ -41,27 +40,13 @@ async function handleCreateCommunityNote(formData: FormData) {
 }
 
 export async function CommunityWallModal() {
-  let defaultName = "";
-  let defaultAvatar = "";
-
-  try {
-    const supabase = await createSupabaseServerClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user?.user_metadata) {
-      defaultName = user.user_metadata.full_name || user.user_metadata.user_name || "";
-      defaultAvatar = user.user_metadata.avatar_url || "";
-    }
-  } catch {
-    // Supabase session lookup is optional
-  }
-
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/70 backdrop-blur-sm">
       <div className="flex min-h-screen items-center justify-center p-4">
         <CreateCommunityNoteBuilder
           onSubmit={handleCreateCommunityNote}
-          creator_name={defaultName}
-          creator_avatar_url={defaultAvatar}
+          creator_name=""
+          creator_avatar_url=""
         />
       </div>
     </div>
