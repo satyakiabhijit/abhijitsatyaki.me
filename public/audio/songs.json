@@ -1,0 +1,42 @@
+[
+  {
+    "id": "kesariya",
+    "title": "Kesariya",
+    "artist": "Arijit Singh",
+    "albumName": "Kesariya (From \"Brahmastra\") - Single",
+    "albumImageUrl": "/music/covers/kesariya.jpg",
+    "audioUrl": "/music/kesariya.m4a",
+    "spotifyUrl": "https://open.spotify.com/search/Kesariya%20(From%20%22Brahmastra%22)%20Pritam%2C%20Arijit%20Singh%20%26%20Amitabh%20Bhattacharya",
+    "artistUrl": "https://open.spotify.com/artist/4YRxDV8wJFPHPTeXepOstw"
+  },
+  {
+    "id": "tum-hi-ho",
+    "title": "Tum Hi Ho",
+    "artist": "Arijit Singh",
+    "albumName": "Aashiqui 2 (Original Motion Picture Soundtrack)",
+    "albumImageUrl": "/music/covers/tum-hi-ho.jpg",
+    "audioUrl": "/music/tum-hi-ho.m4a",
+    "spotifyUrl": "https://open.spotify.com/search/Tum%20Hi%20Ho%20Mithoon%20%26%20Arijit%20Singh",
+    "artistUrl": "https://open.spotify.com/artist/4YRxDV8wJFPHPTeXepOstw"
+  },
+  {
+    "id": "channa-mereya",
+    "title": "Channa Mereya",
+    "artist": "Arijit Singh",
+    "albumName": "Ae Dil Hai Mushkil (Original Motion Picture Soundtrack)",
+    "albumImageUrl": "/music/covers/channa-mereya.jpg",
+    "audioUrl": "/music/channa-mereya.m4a",
+    "spotifyUrl": "https://open.spotify.com/search/Channa%20Mereya%20Pritam%20%26%20Arijit%20Singh",
+    "artistUrl": "https://open.spotify.com/artist/4YRxDV8wJFPHPTeXepOstw"
+  },
+  {
+    "id": "agar-tum-saath-ho",
+    "title": "Agar Tum Saath Ho",
+    "artist": "Arijit Singh",
+    "albumName": "Tamasha (Original Motion Picture Soundtrack)",
+    "albumImageUrl": "/music/covers/agar-tum-saath-ho.jpg",
+    "audioUrl": "/music/agar-tum-saath-ho.m4a",
+    "spotifyUrl": "https://open.spotify.com/search/Agar%20Tum%20Saath%20Ho%20Alka%20Yagnik%20%26%20Arijit%20Singh",
+    "artistUrl": "https://open.spotify.com/artist/4YRxDV8wJFPHPTeXepOstw"
+  }
+]
