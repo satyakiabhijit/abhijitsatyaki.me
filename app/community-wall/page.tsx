@@ -42,8 +42,8 @@ export default async function Page({ searchParams }: SearchParamProps) {
                 canvas.
               </p>
             </div>
-            {/* Desktop Add Button */}
-            <div className="hidden pb-2 text-center md:block">
+            {/* Header Add Button (visible on both mobile and desktop) */}
+            <div className="pb-2 text-center">
               <Button variant="primary" href="/community-wall?show=true">
                 Leave a note
               </Button>
@@ -52,10 +52,10 @@ export default async function Page({ searchParams }: SearchParamProps) {
         </GridWrapper>
       </div>
 
-      {/* Mobile: Grid Layout with Floating Action Button */}
+      {/* Mobile: Grid Layout */}
       <div className="block min-h-screen overflow-x-clip px-4 sm:px-6 md:hidden">
-        {/* Messages Grid with comfortable responsive gaps and padding */}
-        <div className="flex flex-wrap justify-center gap-6 sm:gap-8 pb-32 pt-2">
+        {/* Messages Grid with extra bottom padding to clear the fixed button */}
+        <div className="flex flex-wrap justify-center gap-6 sm:gap-8 pb-36 pt-2">
           {messages?.map((message) => {
             // Subdue rotation slightly on mobile to avoid horizontal overflow
             const safeRotation = Math.max(-3, Math.min(3, Number(message.rotation) || 0));
@@ -72,37 +72,37 @@ export default async function Page({ searchParams }: SearchParamProps) {
             );
           })}
         </div>
-
-        {/* Floating Action Button (FAB) on mobile */}
-        <div className="pointer-events-none fixed bottom-6 inset-x-0 mx-auto z-40 flex justify-center">
-          <Link href="/community-wall?show=true" className="pointer-events-auto">
-            <button
-              className="group flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-xl shadow-indigo-600/35 border border-indigo-400/40 backdrop-blur-md transition-all active:scale-95 hover:from-indigo-600 hover:to-indigo-700"
-              aria-label="Leave a note"
-            >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="transition-transform group-hover:rotate-90 duration-200"
-              >
-                <path d="M12 4V20M4 12H20" />
-              </svg>
-              <span>Leave a note</span>
-            </button>
-          </Link>
-        </div>
       </div>
 
       {/* Desktop: Infinite Canvas */}
       <GridWrapper className="hidden md:block">
         <InfiniteCanvas messages={messages || []} />
       </GridWrapper>
+
+      {/* Truly Fixed Floating Action Button (FAB) on mobile - placed outside any overflow container */}
+      <div className="pointer-events-none fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom,0px))] inset-x-0 z-50 flex justify-center md:hidden px-4">
+        <Link href="/community-wall?show=true" className="pointer-events-auto">
+          <button
+            className="group flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-2xl shadow-indigo-600/40 border border-indigo-400/40 backdrop-blur-md transition-all active:scale-95 hover:from-indigo-600 hover:to-indigo-700"
+            aria-label="Leave a note"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="transition-transform group-hover:rotate-90 duration-200"
+            >
+              <path d="M12 4V20M4 12H20" />
+            </svg>
+            <span>Leave a note</span>
+          </button>
+        </Link>
+      </div>
     </>
   );
 }
