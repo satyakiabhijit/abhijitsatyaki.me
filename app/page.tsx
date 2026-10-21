@@ -12,22 +12,6 @@ import { AboutMeBento } from "./components/AboutMeBento";
 import { AnimatedMobilePhotos } from "./components/AnimatedMobilePhotos";
 import { GridWrapper } from "./components/GridWrapper";
 import { ProjectMiniCard } from "./components/ProjectMiniCard";
-import { getDefaultResume } from "@/app/lib/db/admin";
-
-function formatRole(role: string): string {
-  const map: Record<string, string> = {
-    frontend: "Frontend",
-    backend: "Backend",
-    fullstack: "Full Stack",
-    "software-dev": "Software Dev",
-  };
-  return (
-    map[role.toLowerCase()] ||
-    role
-      .replace(/[-_]/g, " ")
-      .replace(/\b\w/g, (char) => char.toUpperCase())
-  );
-}
 
 
 const homeFeaturedProjects = [
@@ -64,8 +48,6 @@ const homeFeaturedProjects = [
 ];
 
 export default async function Home() {
-  const defaultResume = await getDefaultResume().catch(() => null);
-
   const PROFILE_DELAY = 0;
   const HEADING_DELAY = PROFILE_DELAY + 0.2;
   const PARAGRAPH_DELAY = HEADING_DELAY + 0.1;
@@ -125,11 +107,6 @@ export default async function Home() {
                     />
                   </svg>
                   <span>View Resume</span>
-                  {defaultResume?.role && (
-                    <span className="rounded-full bg-white/20 px-2 py-0.5 text-xs font-semibold text-white">
-                      {formatRole(defaultResume.role)}
-                    </span>
-                  )}
                   <svg
                     className="h-3.5 w-3.5 opacity-70 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                     fill="none"
