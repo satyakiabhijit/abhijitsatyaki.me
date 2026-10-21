@@ -7,7 +7,7 @@ interface Props {
   items: BeyondDevItem[];
 }
 
-function renderFormattedDescription(text: string) {
+export function renderFormattedDescription(text: string) {
   if (!text) return null;
 
   // Split into paragraphs by double newlines

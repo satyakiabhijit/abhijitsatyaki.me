@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
 import type { BeyondDevItem } from "@/app/lib/db/admin";
+import { renderFormattedDescription } from "@/app/beyond-dev/BeyondDevView";
 
 const ROLES = ["frontend", "backend", "fullstack", "software-dev"];
 const PRESET_SECTIONS = [
@@ -991,6 +992,21 @@ export default function Admin() {
                         fontSize: "0.9rem",
                       }}
                     />
+
+                    {/* Live Description Preview */}
+                    {formDescription.trim() && (
+                      <div className="desc-preview-container">
+                        <div className="desc-preview-header">
+                          <span className="desc-preview-dot"></span>
+                          <span className="desc-preview-title">
+                            Live Description Preview (Formatted Markdown &amp; HTML)
+                          </span>
+                        </div>
+                        <div className="desc-preview-body">
+                          {renderFormattedDescription(formDescription)}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Display Order */}
