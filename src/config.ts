@@ -12,7 +12,7 @@ export const config = {
     },
     about: {
         title: "About Me",
-        description: "I'm Abhijit Satyaki, a results-driven Full Stack Developer from India, skilled in the MERN stack, REST APIs, and responsive frontend development. My work spans web development, AI-assisted tools, and research-focused projects in IoMT security and data optimization. With 5 internships, 15+ deployed projects, and 3+ peer-reviewed publications (IEEE + SCOPUS), I build end-to-end solutions — from booking platforms and AI-powered tools to browser extensions with real users. Currently pursuing B.Tech in Information Technology at Jalpaiguri Government Engineering College."
+        description: "I'm Abhijit Satyaki, a results-driven Full Stack Developer from India, skilled in the MERN stack, REST APIs, and responsive frontend development. My work spans web development, AI-assisted tools, and research-focused projects in IoMT security and data optimization. With 5 internships, 15+ deployed projects, and 3+ peer-reviewed publications (IEEE + SCOPUS), I build end-to-end solutions — from booking platforms and AI-powered tools to browser extensions with real users. Completed B.Tech in Information Technology at Jalpaiguri Government Engineering College."
     },
     experiences: [
         {
@@ -92,7 +92,7 @@ export const config = {
             institution: "Jalpaiguri Government Engineering College",
             period: "2023 - 2026",
             location: "Jalpaiguri, West Bengal",
-            description: "Pursuing B.Tech in Information Technology with CGPA: 7.3. Building strong foundations in web technologies, data structures, algorithms, and machine learning."
+            description: "Completed B.Tech in Information Technology with CGPA: 7.3. Building strong foundations in web technologies, data structures, algorithms, and machine learning."
         },
         {
             title: "Diploma in Civil Engineering",

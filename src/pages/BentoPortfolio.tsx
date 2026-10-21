@@ -475,10 +475,6 @@ const BentoPortfolio = () => {
           Designed & built by{" "}
           <a href={contact.github} target="_blank" rel="noreferrer">
             Abhijit Satyaki
-          </a>{" "}
-          · Inspired by{" "}
-          <a href="https://braydoncoyer.dev" target="_blank" rel="noreferrer">
-            Braydon Coyer
           </a>
         </p>
       </footer>
