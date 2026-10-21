@@ -138,7 +138,7 @@ export function BeyondDevView({ items }: Props) {
 
       {/* Empty State */}
       {items.length === 0 && (
-        <div className="mx-auto max-w-md rounded-2xl border border-dashed border-border-primary p-8 text-center">
+        <div className="mx-auto max-w-md rounded-2xl border border-dashed border-border-primary/60 p-8 text-center">
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-indigo-500/10 text-indigo-400">
             <svg
               className="h-6 w-6"
@@ -155,20 +155,12 @@ export function BeyondDevView({ items }: Props) {
             </svg>
           </div>
           <h3 className="text-lg font-medium text-text-primary">
-            No items curated yet
+            Curating reading list &amp; resources
           </h3>
           <p className="mt-2 text-sm text-text-secondary">
-            Books, PDFs, Google Drive links, and notes added through the admin
-            dashboard will appear here section-wise.
+            Favorite books, reading notes, and research materials are currently
+            being compiled. Check back soon!
           </p>
-          <div className="mt-5">
-            <a
-              href="/admin"
-              className="inline-flex items-center gap-1.5 rounded-full bg-indigo-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-indigo-500"
-            >
-              Open Admin Dashboard →
-            </a>
-          </div>
         </div>
       )}
 
