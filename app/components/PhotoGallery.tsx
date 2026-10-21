@@ -79,7 +79,7 @@ export const PhotoGallery = ({
       y: "15px",
       zIndex: 50, // Highest z-index (on top)
       direction: "left" as Direction,
-      src: "/static/Abhijit.png",
+      src: "/Abhijit.png",
     },
     {
       id: 2,

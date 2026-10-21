@@ -97,7 +97,7 @@ export function ConnectionsBento({
               </svg>
               <img
                 className="absolute left-1/2 top-1/2 h-[100px] w-[100px] -translate-x-1/2 -translate-y-1/2 transform rounded-full"
-                src="/static/Abhijit.png"
+                src="/Abhijit.png"
                 alt=""
               />
             </div>

@@ -43,7 +43,7 @@ export default function AboutPage() {
                     <ShadowBox width={188} height={278}></ShadowBox>
                     <img
                       className="absolute left-0 top-0 h-[270px] w-[180px] rotate-[5deg] rounded-lg object-cover shadow"
-                      src="/static/Abhijit.png"
+                      src="/Abhijit.png"
                       alt="Abhijit Satyaki"
                     />
                   </div>
@@ -63,7 +63,7 @@ export default function AboutPage() {
                   <ShadowBox width={188} height={278}></ShadowBox>
                   <img
                     className="absolute left-0 top-0 h-[270px] w-[180px] rotate-[5deg] rounded-lg object-cover shadow"
-                    src="/static/Abhijit.png"
+                    src="/Abhijit.png"
                     alt="Abhijit Satyaki"
                   />
                 </div>

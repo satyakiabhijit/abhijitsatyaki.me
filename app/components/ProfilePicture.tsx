@@ -4,13 +4,13 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function ProfilePicture() {
-  const [imageSrc, setImageSrc] = useState("/static/Abhijit.png");
+  const [imageSrc, setImageSrc] = useState("/Abhijit.png");
   const [isChanging, setIsChanging] = useState(false);
 
   const changeImage = () => {
     setIsChanging(true);
     const images = [
-      "/static/Abhijit.png",
+      "/Abhijit.png",
       "/abhijit_photo_2.jpg",
       "/abhijit_photo_3.jpg",
       "/abhijit_photo_4.jpg",

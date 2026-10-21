@@ -69,7 +69,7 @@ const resumeData: ResumeData = {
       ],
     },
   ],
-  avatarUrl: "/static/Abhijit.png",
+  avatarUrl: "/Abhijit.png",
 };
 
 export function Resume() {

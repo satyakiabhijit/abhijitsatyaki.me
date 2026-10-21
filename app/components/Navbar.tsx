@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 type NavigationLink = {
   name: string;
   link: string;
+  /** Rendered as a plain anchor (used for the PDF resume route). */
+  plain?: boolean;
 };
 
 const navigationLinks: readonly NavigationLink[] = [
@@ -16,8 +18,9 @@ const navigationLinks: readonly NavigationLink[] = [
   { name: "About", link: "/about" },
   { name: "Research", link: "/speaking" },
   { name: "Projects", link: "/projects" },
-  
+
   { name: "Toolbox", link: "/toolbox" },
+  { name: "Resume", link: "/resume", plain: true },
   { name: "Contact", link: "/contact" },
 ] as const;
 
@@ -54,15 +57,28 @@ function DesktopNav() {
       <ul className="flex place-items-center space-x-4 rounded-full border border-border-primary px-5 py-2 text-sm text-gray-500">
         {navigationLinks.map((link) => (
           <li key={link.name}>
-            <Link
-              href={link.link}
-              prefetch={true}
-              className={`${determineActiveClass(
-                link.link,
-              )} font-medium hover:text-text-primary`}
-            >
-              {link.name}
-            </Link>
+            {link.plain ? (
+              <a
+                href={link.link}
+                target="_blank"
+                rel="noreferrer"
+                className={`${determineActiveClass(
+                  link.link,
+                )} font-medium hover:text-text-primary`}
+              >
+                {link.name}
+              </a>
+            ) : (
+              <Link
+                href={link.link}
+                prefetch={true}
+                className={`${determineActiveClass(
+                  link.link,
+                )} font-medium hover:text-text-primary`}
+              >
+                {link.name}
+              </Link>
+            )}
           </li>
         ))}
       </ul>
@@ -111,18 +127,32 @@ function MobileNav() {
             </CloseButton>
           </div>
           <div className="grid grid-cols-1 gap-1 px-1 pb-1 sm:px-3 sm:pb-3">
-            {navigationLinks.map(({ name, link }) => (
-              <Link
-                href={link}
-                key={link}
-                className={`rounded-lg px-3 py-2 text-xl/9 font-medium ${
-                  path === link ? "text-text-primary" : "text-text-secondary"
-                } data-active:bg-gray-950/5`}
-                aria-current={path === link ? "page" : undefined}
-              >
-                {name}
-              </Link>
-            ))}
+            {navigationLinks.map(({ name, link, plain }) =>
+              plain ? (
+                <a
+                  href={link}
+                  key={link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={`rounded-lg px-3 py-2 text-xl/9 font-medium ${
+                    path === link ? "text-text-primary" : "text-text-secondary"
+                  } data-active:bg-gray-950/5`}
+                >
+                  {name}
+                </a>
+              ) : (
+                <Link
+                  href={link}
+                  key={link}
+                  className={`rounded-lg px-3 py-2 text-xl/9 font-medium ${
+                    path === link ? "text-text-primary" : "text-text-secondary"
+                  } data-active:bg-gray-950/5`}
+                  aria-current={path === link ? "page" : undefined}
+                >
+                  {name}
+                </Link>
+              ),
+            )}
           </div>
         </DialogPanel>
       </Dialog>
