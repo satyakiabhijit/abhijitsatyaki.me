@@ -45,6 +45,7 @@ export default function Admin() {
   const [formTitle, setFormTitle] = useState("");
   const [formAuthor, setFormAuthor] = useState("");
   const [formCoverImageUrl, setFormCoverImageUrl] = useState("");
+  const [coverImgError, setCoverImgError] = useState(false);
   const [formDownloadUrl, setFormDownloadUrl] = useState("");
   const [formDescription, setFormDescription] = useState("");
   const [formDisplayOrder, setFormDisplayOrder] = useState<number>(0);
@@ -320,6 +321,7 @@ export default function Admin() {
     setFormTitle("");
     setFormAuthor("");
     setFormCoverImageUrl("");
+    setCoverImgError(false);
     setFormDownloadUrl("");
     setFormDescription("");
     setFormDisplayOrder(0);
@@ -346,6 +348,7 @@ export default function Admin() {
     setFormTitle(item.title);
     setFormAuthor(item.author || "");
     setFormCoverImageUrl(item.cover_image_url || "");
+    setCoverImgError(false);
     setFormDownloadUrl(item.download_url || "");
     setFormDescription(item.description || "");
     setFormDisplayOrder(item.display_order ?? 0);
@@ -891,7 +894,7 @@ export default function Admin() {
                     />
                   </div>
 
-                  {/* Photo Preview Link */}
+                  {/* Photo Preview Link with Live Preview */}
                   <div className="input-group">
                     <label htmlFor="item-cover">Photo Preview / Cover URL:</label>
                     <input
@@ -899,8 +902,61 @@ export default function Admin() {
                       type="url"
                       placeholder="https://... image link or book cover"
                       value={formCoverImageUrl}
-                      onChange={(e) => setFormCoverImageUrl(e.target.value)}
+                      onChange={(e) => {
+                        setFormCoverImageUrl(e.target.value);
+                        setCoverImgError(false);
+                      }}
                     />
+
+                    {/* Live Preview Card */}
+                    {formCoverImageUrl.trim() && (
+                      <div className="cover-preview-card">
+                        <div className="cover-preview-thumb-wrap">
+                          {!coverImgError ? (
+                            /* eslint-disable-next-line @next/next/no-img-element */
+                            <img
+                              src={formCoverImageUrl.trim()}
+                              alt="Cover live preview"
+                              className="cover-preview-img"
+                              onError={() => setCoverImgError(true)}
+                            />
+                          ) : (
+                            <div className="cover-preview-error">
+                              <span style={{ fontSize: "0.85rem" }}>⚠️</span>
+                              <span>Failed to load</span>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="cover-preview-details">
+                          <div className={`cover-preview-badge ${coverImgError ? "error" : ""}`}>
+                            <span className="cover-preview-badge-dot"></span>
+                            <span>{coverImgError ? "Preview Failed" : "Live Preview"}</span>
+                          </div>
+
+                          <span className="cover-preview-url-text" title={formCoverImageUrl.trim()}>
+                            {formCoverImageUrl.trim()}
+                          </span>
+
+                          {coverImgError ? (
+                            <span style={{ fontSize: "0.7rem", color: "#ef4444" }}>
+                              Check URL — ensure it links directly to an image (.jpg, .png, etc.)
+                            </span>
+                          ) : (
+                            <button
+                              type="button"
+                              className="cover-preview-action-btn"
+                              onClick={() => {
+                                setFormCoverImageUrl("");
+                                setCoverImgError(false);
+                              }}
+                            >
+                              ✕ Clear preview
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* PDF / Drive Link */}
