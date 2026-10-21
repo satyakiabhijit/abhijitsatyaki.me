@@ -45,7 +45,7 @@ const techStack: TechItem[][] = [
   // Row 4 - 4 items
   [
     { name: "REST APIs", icon: "https://img.icons8.com/nolan/64/api-settings.png", url: "https://restfulapi.net" },
-    { name: "JWT", icon: "https://img.icons8.com/color/48/json-web-token.png", url: "https://jwt.io" },
+    { name: "JWT", icon: "https://cdn.simpleicons.org/jsonwebtokens/d63aff", url: "https://jwt.io" },
     { name: "WordPress", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-plain.svg", url: "https://wordpress.org" },
     { name: "Bash", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg", url: "https://www.gnu.org/software/bash/" },
   ],
