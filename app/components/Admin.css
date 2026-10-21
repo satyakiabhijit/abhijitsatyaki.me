@@ -388,3 +388,154 @@
     padding: 20px;
   }
 }
+
+/* Tabs */
+.admin-tabs {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid rgba(99, 102, 241, 0.15);
+  padding-bottom: 12px;
+}
+
+.tab-btn {
+  background: transparent;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  color: #64748b;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  border-color: #6366f1;
+  color: #6366f1;
+}
+
+.tab-btn.active {
+  background: #6366f1;
+  border-color: #6366f1;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+}
+
+/* Beyond Dev admin styling */
+.beyond-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .beyond-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.beyond-form-full {
+  grid-column: 1 / -1;
+}
+
+.beyond-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.beyond-admin-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  background: rgba(255, 255, 255, 0.5);
+  transition: all 0.2s;
+}
+
+.beyond-admin-card:hover {
+  border-color: rgba(99, 102, 241, 0.35);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.beyond-card-thumb {
+  width: 54px;
+  height: 72px;
+  border-radius: 6px;
+  object-cover: cover;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.beyond-card-placeholder {
+  width: 54px;
+  height: 72px;
+  border-radius: 6px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px dashed rgba(99, 102, 241, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.beyond-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.beyond-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.beyond-badge {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.beyond-card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0;
+  color: inherit;
+}
+
+.beyond-card-author {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 2px 0 6px 0;
+}
+
+.beyond-card-desc {
+  font-size: 0.85rem;
+  color: #475569;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.beyond-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+

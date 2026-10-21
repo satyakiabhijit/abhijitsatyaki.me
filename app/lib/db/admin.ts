@@ -19,6 +19,19 @@ export interface ResumeRecord {
   updated_at: string;
 }
 
+export interface BeyondDevItem {
+  id: number;
+  section: string;
+  title: string;
+  author: string | null;
+  cover_image_url: string | null;
+  download_url: string | null;
+  description: string | null;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
 const SALT = "abhijit-portfolio-admin-salt-2026";
 const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
@@ -87,6 +100,27 @@ export async function ensureAdminTables(): Promise<void> {
         created_at TIMESTAMPTZ DEFAULT NOW()
       )
     `;
+
+    await sql`
+      CREATE TABLE IF NOT EXISTS beyond_dev_items (
+        id SERIAL PRIMARY KEY,
+        section TEXT NOT NULL DEFAULT 'Books',
+        title TEXT NOT NULL,
+        author TEXT,
+        cover_image_url TEXT,
+        download_url TEXT,
+        description TEXT,
+        display_order INTEGER DEFAULT 0,
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        updated_at TIMESTAMPTZ DEFAULT NOW()
+      )
+    `;
+    await sql`ALTER TABLE beyond_dev_items ADD COLUMN IF NOT EXISTS section TEXT NOT NULL DEFAULT 'Books'`;
+    await sql`ALTER TABLE beyond_dev_items ADD COLUMN IF NOT EXISTS author TEXT`;
+    await sql`ALTER TABLE beyond_dev_items ADD COLUMN IF NOT EXISTS cover_image_url TEXT`;
+    await sql`ALTER TABLE beyond_dev_items ADD COLUMN IF NOT EXISTS download_url TEXT`;
+    await sql`ALTER TABLE beyond_dev_items ADD COLUMN IF NOT EXISTS description TEXT`;
+    await sql`ALTER TABLE beyond_dev_items ADD COLUMN IF NOT EXISTS display_order INTEGER DEFAULT 0`;
   } catch (error) {
     console.error("Error ensuring admin tables:", error);
   }
@@ -293,4 +327,77 @@ export async function changePassword(
   await sql`DELETE FROM admin_sessions WHERE user_id = ${userId}`;
 
   return { success: true };
+}
+
+export async function listBeyondDevItems(): Promise<BeyondDevItem[]> {
+  await ensureAdminTables();
+  const rows = await sql`
+    SELECT id, section, title, author, cover_image_url, download_url, description, display_order, created_at, updated_at
+    FROM beyond_dev_items
+    ORDER BY section ASC, display_order ASC, id ASC
+  `;
+  return (rows || []) as BeyondDevItem[];
+}
+
+export async function createBeyondDevItem(data: {
+  section: string;
+  title: string;
+  author?: string | null;
+  cover_image_url?: string | null;
+  download_url?: string | null;
+  description?: string | null;
+  display_order?: number;
+}): Promise<BeyondDevItem | null> {
+  await ensureAdminTables();
+  const rows = await sql`
+    INSERT INTO beyond_dev_items (section, title, author, cover_image_url, download_url, description, display_order)
+    VALUES (
+      ${data.section || "Books"},
+      ${data.title},
+      ${data.author || null},
+      ${data.cover_image_url || null},
+      ${data.download_url || null},
+      ${data.description || null},
+      ${data.display_order ?? 0}
+    )
+    RETURNING id, section, title, author, cover_image_url, download_url, description, display_order, created_at, updated_at
+  `;
+  return (rows?.[0] as BeyondDevItem) || null;
+}
+
+export async function updateBeyondDevItem(
+  id: number,
+  data: {
+    section?: string;
+    title?: string;
+    author?: string | null;
+    cover_image_url?: string | null;
+    download_url?: string | null;
+    description?: string | null;
+    display_order?: number;
+  },
+): Promise<BeyondDevItem | null> {
+  await ensureAdminTables();
+  const rows = await sql`
+    UPDATE beyond_dev_items
+    SET section = COALESCE(${data.section}, section),
+        title = COALESCE(${data.title}, title),
+        author = CASE WHEN ${data.author !== undefined} THEN ${data.author} ELSE author END,
+        cover_image_url = CASE WHEN ${data.cover_image_url !== undefined} THEN ${data.cover_image_url} ELSE cover_image_url END,
+        download_url = CASE WHEN ${data.download_url !== undefined} THEN ${data.download_url} ELSE download_url END,
+        description = CASE WHEN ${data.description !== undefined} THEN ${data.description} ELSE description END,
+        display_order = COALESCE(${data.display_order}, display_order),
+        updated_at = NOW()
+    WHERE id = ${id}
+    RETURNING id, section, title, author, cover_image_url, download_url, description, display_order, created_at, updated_at
+  `;
+  return (rows?.[0] as BeyondDevItem) || null;
+}
+
+export async function deleteBeyondDevItem(id: number): Promise<boolean> {
+  await ensureAdminTables();
+  const result = await sql`
+    DELETE FROM beyond_dev_items WHERE id = ${id} RETURNING id
+  `;
+  return (result?.length ?? 0) > 0;
 }

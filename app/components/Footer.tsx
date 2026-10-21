@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { SocialPill } from "./SocialPill";
 import { GridWrapper } from "./GridWrapper";
 
@@ -27,6 +27,7 @@ const footerSections: FooterSection[] = [
     title: "Specifics",
     links: [
       { href: "/toolbox", label: "Toolbox" },
+      { href: "/beyond-dev", label: "Beyond Dev" },
       { href: "/speaking", label: "Research" },
       {
         href: "https://github.com/satyakiabhijit",
