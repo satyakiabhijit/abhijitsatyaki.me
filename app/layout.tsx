@@ -9,6 +9,7 @@ import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import Script from "next/script";
 
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteMetadata.siteUrl),
   description: siteMetadata.description,
@@ -37,6 +38,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const vemetricToken =
+    process.env.NEXT_PUBLIC_VEMETRIC_TOKEN || process.env.VEMETRIC_TOKEN;
+
   return (
     <html
       lang="en"
@@ -61,18 +65,28 @@ export default function RootLayout({
         </main>
       </body>
 
-      <Script id="vemetric-loader" strategy="afterInteractive">
-        {`
-          window.vmtrcq = window.vmtrcq || [];
-          window.vmtrc = window.vmtrc || ((...args) => window.vmtrcq.push(args));
-        `}
-      </Script>
+      {/*
+        Vemetric analytics. The script refuses to initialise without a public
+        token (it logs "Please provide your Public Token" and throws), so it
+        is only loaded once a token is configured via VEMETRIC_TOKEN.
+      */}
+      {vemetricToken && (
+        <>
+          <Script id="vemetric-loader" strategy="afterInteractive">
+            {`
+              window.vmtrcq = window.vmtrcq || [];
+              window.vmtrc = window.vmtrc || ((...args) => window.vmtrcq.push(args));
+            `}
+          </Script>
 
-      <Script
-        src="https://cdn.vemetric.com/main.js"
-        
-        strategy="afterInteractive"
-      />
+          <Script
+            src="https://cdn.vemetric.com/main.js"
+            data-token={vemetricToken}
+            data-allow-localhost="true"
+            strategy="afterInteractive"
+          />
+        </>
+      )}
     </html>
   );
 }
