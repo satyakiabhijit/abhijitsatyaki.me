@@ -113,17 +113,18 @@ export function verifyCaptcha(token: string, answer: string): { valid: boolean; 
       return { valid: false, error: "Captcha expired. Please refresh and try again." };
     }
 
-    // Velocity check (bot prevention: must take at least 1.5s to fill form)
-    if (now - timestamp < 1500) {
-      return { valid: false, error: "Form submitted too quickly. Please take a moment." };
+    // Velocity check (relax to 300ms to avoid blocking fast human typers or autofill)
+    if (now - timestamp < 300) {
+      return { valid: false, error: "Form submitted too quickly. Please take a moment and try again." };
     }
 
     const num1 = parseInt(num1Str, 10);
     const num2 = parseInt(num2Str, 10);
     const expectedAnswer = num1 + num2;
 
-    if (parseInt(answer.trim(), 10) !== expectedAnswer) {
-      return { valid: false, error: `Incorrect captcha answer. Please try again.` };
+    const userAns = parseInt(String(answer).trim(), 10);
+    if (isNaN(userAns) || userAns !== expectedAnswer) {
+      return { valid: false, error: `Incorrect answer. Please solve the math verification again.` };
     }
 
     return { valid: true };
