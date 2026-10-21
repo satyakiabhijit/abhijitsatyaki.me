@@ -47,9 +47,11 @@ export function comparePassword(
 ): boolean {
   try {
     const derived = crypto.scryptSync(plain, salt, 64).toString("hex");
+    const a = Buffer.from(derived);
+    const b = Buffer.from(hash);
     return (
-      derived.length === hash.length &&
-      crypto.timingSafeEqual(Buffer.from(derived), Buffer.from(hash))
+      a.length === b.length &&
+      crypto.timingSafeEqual(new Uint8Array(a), new Uint8Array(b))
     );
   } catch {
     return false;
