@@ -22,6 +22,7 @@ export interface ResumeRecord {
 export interface BeyondDevItem {
   id: number;
   section: string;
+  subsection: string | null;
   title: string;
   author: string | null;
   cover_image_url: string | null;
@@ -116,6 +117,7 @@ export async function ensureAdminTables(): Promise<void> {
       )
     `;
     await sql`ALTER TABLE beyond_dev_items ADD COLUMN IF NOT EXISTS section TEXT NOT NULL DEFAULT 'Books'`;
+    await sql`ALTER TABLE beyond_dev_items ADD COLUMN IF NOT EXISTS subsection TEXT`;
     await sql`ALTER TABLE beyond_dev_items ADD COLUMN IF NOT EXISTS author TEXT`;
     await sql`ALTER TABLE beyond_dev_items ADD COLUMN IF NOT EXISTS cover_image_url TEXT`;
     await sql`ALTER TABLE beyond_dev_items ADD COLUMN IF NOT EXISTS download_url TEXT`;
@@ -332,15 +334,16 @@ export async function changePassword(
 export async function listBeyondDevItems(): Promise<BeyondDevItem[]> {
   await ensureAdminTables();
   const rows = await sql`
-    SELECT id, section, title, author, cover_image_url, download_url, description, display_order, created_at, updated_at
+    SELECT id, section, subsection, title, author, cover_image_url, download_url, description, display_order, created_at, updated_at
     FROM beyond_dev_items
-    ORDER BY section ASC, display_order ASC, id ASC
+    ORDER BY section ASC, subsection ASC NULLS LAST, display_order ASC, id ASC
   `;
   return (rows || []) as BeyondDevItem[];
 }
 
 export async function createBeyondDevItem(data: {
   section: string;
+  subsection?: string | null;
   title: string;
   author?: string | null;
   cover_image_url?: string | null;
@@ -350,9 +353,10 @@ export async function createBeyondDevItem(data: {
 }): Promise<BeyondDevItem | null> {
   await ensureAdminTables();
   const rows = await sql`
-    INSERT INTO beyond_dev_items (section, title, author, cover_image_url, download_url, description, display_order)
+    INSERT INTO beyond_dev_items (section, subsection, title, author, cover_image_url, download_url, description, display_order)
     VALUES (
       ${data.section || "Books"},
+      ${data.subsection || null},
       ${data.title},
       ${data.author || null},
       ${data.cover_image_url || null},
@@ -360,7 +364,7 @@ export async function createBeyondDevItem(data: {
       ${data.description || null},
       ${data.display_order ?? 0}
     )
-    RETURNING id, section, title, author, cover_image_url, download_url, description, display_order, created_at, updated_at
+    RETURNING id, section, subsection, title, author, cover_image_url, download_url, description, display_order, created_at, updated_at
   `;
   return (rows?.[0] as BeyondDevItem) || null;
 }
@@ -369,6 +373,7 @@ export async function updateBeyondDevItem(
   id: number,
   data: {
     section?: string;
+    subsection?: string | null;
     title?: string;
     author?: string | null;
     cover_image_url?: string | null;
@@ -381,6 +386,7 @@ export async function updateBeyondDevItem(
   const rows = await sql`
     UPDATE beyond_dev_items
     SET section = COALESCE(${data.section}, section),
+        subsection = CASE WHEN ${data.subsection !== undefined} THEN ${data.subsection} ELSE subsection END,
         title = COALESCE(${data.title}, title),
         author = CASE WHEN ${data.author !== undefined} THEN ${data.author} ELSE author END,
         cover_image_url = CASE WHEN ${data.cover_image_url !== undefined} THEN ${data.cover_image_url} ELSE cover_image_url END,
@@ -389,7 +395,7 @@ export async function updateBeyondDevItem(
         display_order = COALESCE(${data.display_order}, display_order),
         updated_at = NOW()
     WHERE id = ${id}
-    RETURNING id, section, title, author, cover_image_url, download_url, description, display_order, created_at, updated_at
+    RETURNING id, section, subsection, title, author, cover_image_url, download_url, description, display_order, created_at, updated_at
   `;
   return (rows?.[0] as BeyondDevItem) || null;
 }

@@ -75,6 +75,17 @@ function renderFormattedDescription(text: string) {
   );
 }
 
+interface SubsectionGroup {
+  name: string;
+  items: BeyondDevItem[];
+}
+
+interface SectionGroup {
+  name: string;
+  totalCount: number;
+  subsections: SubsectionGroup[];
+}
+
 export function BeyondDevView({ items }: Props) {
   const [selectedSection, setSelectedSection] = useState<string>("All");
 
@@ -89,28 +100,44 @@ export function BeyondDevView({ items }: Props) {
     return ["All", ...Array.from(set)];
   }, [items]);
 
-  // Filter items based on active tab
-  const filteredItems = useMemo(() => {
-    if (selectedSection === "All") return items;
-    return items.filter((item) => item.section === selectedSection);
-  }, [items, selectedSection]);
+  // Group items hierarchically: Section -> Subsections -> Cards
+  const groupedSections: SectionGroup[] = useMemo(() => {
+    const targetItems =
+      selectedSection === "All"
+        ? items
+        : items.filter((item) => item.section === selectedSection);
 
-  // Group items section-wise if "All" is selected
-  const groupedSections = useMemo(() => {
-    if (selectedSection !== "All") {
-      return [{ name: selectedSection, items: filteredItems }];
-    }
-    const map = new Map<string, BeyondDevItem[]>();
-    items.forEach((item) => {
+    const sectionMap = new Map<string, BeyondDevItem[]>();
+    targetItems.forEach((item) => {
       const sec = item.section || "General";
-      if (!map.has(sec)) map.set(sec, []);
-      map.get(sec)!.push(item);
+      if (!sectionMap.has(sec)) sectionMap.set(sec, []);
+      sectionMap.get(sec)!.push(item);
     });
-    return Array.from(map.entries()).map(([name, secItems]) => ({
-      name,
-      items: secItems,
-    }));
-  }, [items, selectedSection, filteredItems]);
+
+    return Array.from(sectionMap.entries()).map(([sectionName, secItems]) => {
+      const subMap = new Map<string, BeyondDevItem[]>();
+      secItems.forEach((item) => {
+        const sub = item.subsection?.trim() || "";
+        if (!subMap.has(sub)) subMap.set(sub, []);
+        subMap.get(sub)!.push(item);
+      });
+
+      // Sort: named subsections first, general/empty at the end
+      const subsections: SubsectionGroup[] = Array.from(subMap.entries())
+        .map(([name, subItems]) => ({ name, items: subItems }))
+        .sort((a, b) => {
+          if (!a.name) return 1;
+          if (!b.name) return -1;
+          return a.name.localeCompare(b.name);
+        });
+
+      return {
+        name: sectionName,
+        totalCount: secItems.length,
+        subsections,
+      };
+    });
+  }, [items, selectedSection]);
 
   return (
     <div className="space-y-12">
@@ -164,126 +191,166 @@ export function BeyondDevView({ items }: Props) {
         </div>
       )}
 
-      {/* Section-wise Grid Display */}
+      {/* Section-wise and Subsection-wise Grid Display */}
       {groupedSections.map((group) => {
-        if (group.items.length === 0) return null;
+        if (group.totalCount === 0) return null;
+
+        const hasSubsections = group.subsections.some((s) => s.name.length > 0);
 
         return (
-          <div key={group.name} className="space-y-6">
+          <div key={group.name} className="space-y-8">
+            {/* Main Section Header */}
             <div className="flex items-center gap-3 border-b border-border-primary/50 pb-3">
-              <span className="flex h-2 w-2 rounded-full bg-indigo-500"></span>
+              <span className="flex h-2.5 w-2.5 rounded-full bg-indigo-500 shadow-sm shadow-indigo-500/50"></span>
               <h2 className="text-xl font-semibold tracking-tight text-text-primary">
                 {group.name}
               </h2>
               <span className="rounded-full bg-indigo-500/10 px-2 py-0.5 text-xs text-indigo-400">
-                {group.items.length} {group.items.length === 1 ? "item" : "items"}
+                {group.totalCount} {group.totalCount === 1 ? "item" : "items"}
               </span>
             </div>
 
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {group.items.map((item) => {
+            {/* Sub-sections Container */}
+            <div className="space-y-8">
+              {group.subsections.map((subGroup) => {
+                if (subGroup.items.length === 0) return null;
+
                 return (
                   <div
-                    key={item.id}
-                    className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border-primary/60 bg-gradient-to-b from-bg-secondary/40 to-bg-primary p-5 transition-all duration-300 hover:border-indigo-500/40 hover:shadow-xl hover:shadow-indigo-500/5 hover:-translate-y-1"
+                    key={subGroup.name || "__default__"}
+                    className="space-y-4"
                   >
-                    <div>
-                      {/* Photo / Cover Preview */}
-                      {item.cover_image_url ? (
-                        <div className="relative mb-4 aspect-[4/3] w-full overflow-hidden rounded-xl border border-border-primary/50 bg-black/30">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={item.cover_image_url}
-                            alt={item.title}
-                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                            loading="lazy"
-                          />
+                    {/* Render sub-section header if this section has named sub-sections */}
+                    {hasSubsections && (
+                      <div className="flex items-center gap-2.5 pt-1">
+                        <div className="flex items-center gap-1.5 rounded-lg border border-indigo-500/20 bg-indigo-500/10 px-2.5 py-1 text-xs font-semibold text-indigo-300">
+                          <span className="text-indigo-400">📂</span>
+                          <span>{subGroup.name || "General"}</span>
                         </div>
-                      ) : (
-                        <div className="relative mb-4 flex aspect-[4/3] w-full flex-col items-center justify-center rounded-xl border border-dashed border-indigo-500/20 bg-indigo-950/20 p-4 text-center">
-                          <svg
-                            className="h-10 w-10 text-indigo-400/60 transition-transform duration-300 group-hover:scale-110"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth="1.5"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
-                            />
-                          </svg>
-                          <span className="mt-2 text-xs font-medium text-indigo-300/80">
-                            {item.section}
-                          </span>
-                        </div>
-                      )}
-
-                      {/* Header details */}
-                      <div className="mb-2 flex items-center justify-between gap-2">
-                        <span className="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2.5 py-0.5 text-[11px] font-medium text-indigo-400">
-                          {item.section}
+                        <span className="text-xs text-text-secondary/70">
+                          ({subGroup.items.length}{" "}
+                          {subGroup.items.length === 1 ? "resource" : "resources"})
                         </span>
-                      </div>
-
-                      <h3 className="text-lg font-semibold tracking-tight text-text-primary group-hover:text-indigo-300 transition-colors">
-                        {item.title}
-                      </h3>
-
-                      {item.author && (
-                        <p className="mt-0.5 text-xs font-medium text-text-secondary">
-                          by {item.author}
-                        </p>
-                      )}
-
-                      {/* Description with HTML/Markdown formatting */}
-                      {item.description && (
-                        <div className="mt-3.5 border-t border-border-primary/40 pt-3">
-                          {renderFormattedDescription(item.description)}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Download / Drive Link */}
-                    {item.download_url && (
-                      <div className="mt-5 border-t border-border-primary/40 pt-4">
-                        <a
-                          href={item.download_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600/90 px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-indigo-500 active:scale-[0.98]"
-                        >
-                          <svg
-                            className="h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth="2"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
-                            />
-                          </svg>
-                          <span>Download / View PDF (Drive)</span>
-                          <svg
-                            className="h-3 w-3 opacity-70"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth="2"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
-                            />
-                          </svg>
-                        </a>
+                        <div className="h-px flex-1 bg-border-primary/30"></div>
                       </div>
                     )}
+
+                    {/* Cards Grid */}
+                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                      {subGroup.items.map((item) => {
+                        return (
+                          <div
+                            key={item.id}
+                            className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border-primary/60 bg-gradient-to-b from-bg-secondary/40 to-bg-primary p-5 transition-all duration-300 hover:border-indigo-500/40 hover:shadow-xl hover:shadow-indigo-500/5 hover:-translate-y-1"
+                          >
+                            <div>
+                              {/* Photo / Cover Preview */}
+                              {item.cover_image_url ? (
+                                <div className="relative mb-4 aspect-[4/3] w-full overflow-hidden rounded-xl border border-border-primary/50 bg-black/30">
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                                  <img
+                                    src={item.cover_image_url}
+                                    alt={item.title}
+                                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    loading="lazy"
+                                  />
+                                </div>
+                              ) : (
+                                <div className="relative mb-4 flex aspect-[4/3] w-full flex-col items-center justify-center rounded-xl border border-dashed border-indigo-500/20 bg-indigo-950/20 p-4 text-center">
+                                  <svg
+                                    className="h-10 w-10 text-indigo-400/60 transition-transform duration-300 group-hover:scale-110"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth="1.5"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
+                                    />
+                                  </svg>
+                                  <span className="mt-2 text-xs font-medium text-indigo-300/80">
+                                    {item.subsection
+                                      ? `${item.section} › ${item.subsection}`
+                                      : item.section}
+                                  </span>
+                                </div>
+                              )}
+
+                              {/* Header badges */}
+                              <div className="mb-2 flex items-center gap-1.5 flex-wrap">
+                                <span className="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2.5 py-0.5 text-[11px] font-medium text-indigo-400">
+                                  {item.section}
+                                </span>
+                                {item.subsection && (
+                                  <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-medium text-emerald-300">
+                                    {item.subsection}
+                                  </span>
+                                )}
+                              </div>
+
+                              <h3 className="text-lg font-semibold tracking-tight text-text-primary group-hover:text-indigo-300 transition-colors">
+                                {item.title}
+                              </h3>
+
+                              {item.author && (
+                                <p className="mt-0.5 text-xs font-medium text-text-secondary">
+                                  by {item.author}
+                                </p>
+                              )}
+
+                              {/* Description with HTML/Markdown formatting */}
+                              {item.description && (
+                                <div className="mt-3.5 border-t border-border-primary/40 pt-3">
+                                  {renderFormattedDescription(item.description)}
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Download / Drive Link */}
+                            {item.download_url && (
+                              <div className="mt-5 border-t border-border-primary/40 pt-4">
+                                <a
+                                  href={item.download_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600/90 px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-indigo-500 active:scale-[0.98]"
+                                >
+                                  <svg
+                                    className="h-4 w-4"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth="2"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+                                    />
+                                  </svg>
+                                  <span>Download / View PDF (Drive)</span>
+                                  <svg
+                                    className="h-3 w-3 opacity-70"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth="2"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
+                                    />
+                                  </svg>
+                                </a>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 );
               })}

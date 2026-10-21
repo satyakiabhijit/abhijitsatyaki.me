@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
 import type { BeyondDevItem } from "@/app/lib/db/admin";
 
@@ -40,6 +40,8 @@ export default function Admin() {
 
   const [formSection, setFormSection] = useState("Books");
   const [customSection, setCustomSection] = useState("");
+  const [formSubsection, setFormSubsection] = useState("");
+  const [customSubsection, setCustomSubsection] = useState("");
   const [formTitle, setFormTitle] = useState("");
   const [formAuthor, setFormAuthor] = useState("");
   const [formCoverImageUrl, setFormCoverImageUrl] = useState("");
@@ -47,6 +49,36 @@ export default function Admin() {
   const [formDescription, setFormDescription] = useState("");
   const [formDisplayOrder, setFormDisplayOrder] = useState<number>(0);
   const [savingItem, setSavingItem] = useState(false);
+
+  // Dynamically populate available sections from presets + any custom ones created
+  const availableSections = useMemo(() => {
+    const set = new Set<string>(PRESET_SECTIONS);
+    beyondItems.forEach((item) => {
+      if (item.section && item.section.trim()) {
+        set.add(item.section.trim());
+      }
+    });
+    return Array.from(set);
+  }, [beyondItems]);
+
+  const activeSection =
+    formSection === "__custom__" ? customSection.trim() : formSection.trim();
+
+  // Dynamically populate available subsections under the currently selected section
+  const availableSubsections = useMemo(() => {
+    if (!activeSection) return [];
+    const set = new Set<string>();
+    beyondItems.forEach((item) => {
+      if (
+        item.section?.toLowerCase() === activeSection.toLowerCase() &&
+        item.subsection &&
+        item.subsection.trim()
+      ) {
+        set.add(item.subsection.trim());
+      }
+    });
+    return Array.from(set);
+  }, [beyondItems, activeSection]);
 
   const authHeaders = () => ({
     Authorization: `Bearer ${localStorage.getItem("admin_token")}`,
@@ -283,6 +315,8 @@ export default function Admin() {
     setEditingId(null);
     setFormSection("Books");
     setCustomSection("");
+    setFormSubsection("");
+    setCustomSubsection("");
     setFormTitle("");
     setFormAuthor("");
     setFormCoverImageUrl("");
@@ -293,13 +327,22 @@ export default function Admin() {
 
   const handleEditBeyondDevItem = (item: BeyondDevItem) => {
     setEditingId(item.id);
-    if (PRESET_SECTIONS.includes(item.section)) {
+    if (availableSections.includes(item.section)) {
       setFormSection(item.section);
       setCustomSection("");
     } else {
       setFormSection("__custom__");
       setCustomSection(item.section);
     }
+
+    if (!item.subsection) {
+      setFormSubsection("");
+      setCustomSubsection("");
+    } else {
+      setFormSubsection(item.subsection);
+      setCustomSubsection("");
+    }
+
     setFormTitle(item.title);
     setFormAuthor(item.author || "");
     setFormCoverImageUrl(item.cover_image_url || "");
@@ -322,9 +365,15 @@ export default function Admin() {
         ? customSection.trim() || "Books"
         : formSection.trim();
 
+    const finalSubsection =
+      formSubsection === "__custom__"
+        ? customSubsection.trim() || null
+        : formSubsection.trim() || null;
+
     try {
       const payload = {
         section: finalSection,
+        subsection: finalSubsection,
         title: formTitle.trim(),
         author: formAuthor.trim() || null,
         cover_image_url: formCoverImageUrl.trim() || null,
@@ -746,33 +795,72 @@ export default function Admin() {
 
               <form onSubmit={handleSaveBeyondDevItem} className="admin-form full-width">
                 <div className="beyond-form-grid">
-                  {/* Section Selector */}
+                  {/* Main Section Selector */}
                   <div className="input-group">
-                    <label htmlFor="section-select">Section / Category:</label>
+                    <label htmlFor="section-select">Main Section:</label>
                     <select
                       id="section-select"
                       value={formSection}
-                      onChange={(e) => setFormSection(e.target.value)}
+                      onChange={(e) => {
+                        setFormSection(e.target.value);
+                        setFormSubsection("");
+                        setCustomSubsection("");
+                      }}
                     >
-                      {PRESET_SECTIONS.map((sec) => (
+                      {availableSections.map((sec) => (
                         <option key={sec} value={sec}>
                           {sec}
                         </option>
                       ))}
-                      <option value="__custom__">+ Create Custom Section...</option>
+                      <option value="__custom__">+ Create Custom Main Section...</option>
                     </select>
                   </div>
 
-                  {/* Custom section input if selected */}
+                  {/* Custom main section input if selected */}
                   {formSection === "__custom__" && (
                     <div className="input-group">
-                      <label htmlFor="custom-sec-name">Custom Section Name:</label>
+                      <label htmlFor="custom-sec-name">Custom Main Section Name *:</label>
                       <input
                         id="custom-sec-name"
                         type="text"
                         placeholder="e.g. Science, Biography, Fiction"
                         value={customSection}
                         onChange={(e) => setCustomSection(e.target.value)}
+                        required
+                      />
+                    </div>
+                  )}
+
+                  {/* Sub-section Selector */}
+                  <div className="input-group">
+                    <label htmlFor="subsection-select">
+                      Sub-section (under {activeSection || "Section"}):
+                    </label>
+                    <select
+                      id="subsection-select"
+                      value={formSubsection}
+                      onChange={(e) => setFormSubsection(e.target.value)}
+                    >
+                      <option value="">(None / General)</option>
+                      {availableSubsections.map((sub) => (
+                        <option key={sub} value={sub}>
+                          {sub}
+                        </option>
+                      ))}
+                      <option value="__custom__">+ Create Custom Sub-section...</option>
+                    </select>
+                  </div>
+
+                  {/* Custom subsection input if selected */}
+                  {formSubsection === "__custom__" && (
+                    <div className="input-group">
+                      <label htmlFor="custom-subsec-name">Custom Sub-section Name *:</label>
+                      <input
+                        id="custom-subsec-name"
+                        type="text"
+                        placeholder="e.g. Detective, Sci-Fi, Biography, Mystery"
+                        value={customSubsection}
+                        onChange={(e) => setCustomSubsection(e.target.value)}
                         required
                       />
                     </div>
@@ -924,6 +1012,18 @@ export default function Admin() {
                       <div className="beyond-card-info">
                         <div className="beyond-card-header">
                           <span className="beyond-badge">{item.section}</span>
+                          {item.subsection && (
+                            <span
+                              className="beyond-badge"
+                              style={{
+                                background: "rgba(16, 185, 129, 0.12)",
+                                color: "#10b981",
+                                border: "1px solid rgba(16, 185, 129, 0.25)",
+                              }}
+                            >
+                              ↳ {item.subsection}
+                            </span>
+                          )}
                           {item.display_order > 0 && (
                             <span style={{ fontSize: "0.75rem", color: "#94a3b8" }}>
                               Order: {item.display_order}

@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { section, title, author, cover_image_url, download_url, description, display_order } = body;
+    const { section, subsection, title, author, cover_image_url, download_url, description, display_order } = body;
 
     if (!title || !title.trim()) {
       return Response.json({ error: "Title is required" }, { status: 400 });
@@ -49,6 +49,7 @@ export async function POST(request: NextRequest) {
 
     const item = await createBeyondDevItem({
       section: (section || "Books").trim(),
+      subsection: subsection?.trim() || null,
       title: title.trim(),
       author: author?.trim() || null,
       cover_image_url: cover_image_url?.trim() || null,
@@ -79,7 +80,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { id, section, title, author, cover_image_url, download_url, description, display_order } = body;
+    const { id, section, subsection, title, author, cover_image_url, download_url, description, display_order } = body;
 
     if (!id || typeof id !== "number") {
       return Response.json({ error: "Valid ID is required" }, { status: 400 });
@@ -87,6 +88,7 @@ export async function PUT(request: NextRequest) {
 
     const item = await updateBeyondDevItem(id, {
       section: section !== undefined ? section.trim() : undefined,
+      subsection: subsection !== undefined ? (subsection ? subsection.trim() : null) : undefined,
       title: title !== undefined ? title.trim() : undefined,
       author: author !== undefined ? (author ? author.trim() : null) : undefined,
       cover_image_url: cover_image_url !== undefined ? (cover_image_url ? cover_image_url.trim() : null) : undefined,
