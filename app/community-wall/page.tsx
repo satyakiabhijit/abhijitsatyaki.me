@@ -52,45 +52,48 @@ export default async function Page({ searchParams }: SearchParamProps) {
         </GridWrapper>
       </div>
 
-      {/* Mobile: Original Grid Layout with sticky button */}
-      <div className="block min-h-screen md:hidden">
-        {/* Messages Grid with extra bottom padding */}
-        <div className="flex flex-wrap justify-center gap-12 p-6 pb-40">
-          {messages?.map((message) => (
-            <CommunityWallCard
-              key={message.id}
-              message={message.message}
-              patternIndex={message.patternindex}
-              author={message.creator_name}
-              profilePicture={message.creator_avatar_url}
-              rotation={message.rotation}
-              className="h-[300px] w-[250px] shadow-[12px_12px_0px_0px_rgba(214,218,222,0.3)]"
-            />
-          ))}
+      {/* Mobile: Grid Layout with Floating Action Button */}
+      <div className="block min-h-screen overflow-x-clip px-4 sm:px-6 md:hidden">
+        {/* Messages Grid with comfortable responsive gaps and padding */}
+        <div className="flex flex-wrap justify-center gap-6 sm:gap-8 pb-32 pt-2">
+          {messages?.map((message) => {
+            // Subdue rotation slightly on mobile to avoid horizontal overflow
+            const safeRotation = Math.max(-3, Math.min(3, Number(message.rotation) || 0));
+            return (
+              <CommunityWallCard
+                key={message.id}
+                message={message.message}
+                patternIndex={message.patternindex}
+                author={message.creator_name}
+                profilePicture={message.creator_avatar_url}
+                rotation={safeRotation}
+                className="h-[310px] w-[260px] xs:w-[280px] sm:w-[295px] shadow-[6px_6px_0px_0px_rgba(99,102,241,0.2)] hover:shadow-[8px_8px_0px_0px_rgba(99,102,241,0.3)] transition-all"
+              />
+            );
+          })}
         </div>
 
-        {/* Sticky button container */}
-        <div className="pointer-events-none sticky bottom-0 -mt-40 mb-8 flex h-32 items-end justify-center bg-gradient-to-b from-transparent to-zinc-300 pb-8">
-          <Link href="/community-wall?show=true">
+        {/* Floating Action Button (FAB) on mobile */}
+        <div className="pointer-events-none fixed bottom-6 inset-x-0 mx-auto z-40 flex justify-center">
+          <Link href="/community-wall?show=true" className="pointer-events-auto">
             <button
-              className="group pointer-events-auto flex h-[60px] w-[60px] items-center justify-center rounded-full bg-dark-primary shadow-lg transition-transform hover:scale-110"
-              aria-label="Add new item"
+              className="group flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-xl shadow-indigo-600/35 border border-indigo-400/40 backdrop-blur-md transition-all active:scale-95 hover:from-indigo-600 hover:to-indigo-700"
+              aria-label="Leave a note"
             >
               <svg
-                width="24"
-                height="24"
+                width="18"
+                height="18"
                 viewBox="0 0 24 24"
                 fill="none"
-                className="text-gray-400 group-hover:text-gray-200"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="transition-transform group-hover:rotate-90 duration-200"
               >
-                <path
-                  d="M12 4V20M4 12H20"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
+                <path d="M12 4V20M4 12H20" />
               </svg>
+              <span>Leave a note</span>
             </button>
           </Link>
         </div>

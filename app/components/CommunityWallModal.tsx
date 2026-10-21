@@ -41,8 +41,8 @@ async function handleCreateCommunityNote(formData: FormData) {
 
 export async function CommunityWallModal() {
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/70 backdrop-blur-sm">
-      <div className="flex min-h-screen items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden bg-black/80 backdrop-blur-md">
+      <div className="flex min-h-full items-center justify-center p-3 sm:p-6 py-8">
         <CreateCommunityNoteBuilder
           onSubmit={handleCreateCommunityNote}
           creator_name=""

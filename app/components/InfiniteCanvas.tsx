@@ -194,6 +194,31 @@ export function InfiniteCanvas({ messages, children }: InfiniteCanvasProps) {
     }
   };
 
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (e.touches.length === 1) {
+      setIsDragging(true);
+      setDragStart({
+        x: e.touches[0].clientX - offset.x,
+        y: e.touches[0].clientY - offset.y,
+      });
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!isDragging || e.touches.length !== 1) return;
+    const newOffset = {
+      x: e.touches[0].clientX - dragStart.x,
+      y: e.touches[0].clientY - dragStart.y,
+    };
+    setOffset(newOffset);
+  };
+
+  const handleTouchEnd = () => {
+    if (isDragging) {
+      setIsDragging(false);
+    }
+  };
+
   const handleRecenter = () => {
     setIsTransitioning(true);
     setOffset({ x: 0, y: 0 });
@@ -220,7 +245,7 @@ export function InfiniteCanvas({ messages, children }: InfiniteCanvasProps) {
       {/* Interactive canvas area */}
       <div
         ref={containerRef}
-        className="absolute inset-0 overflow-hidden"
+        className="absolute inset-0 overflow-hidden touch-none"
         style={{
           cursor: isDragging ? "grabbing" : "grab",
         }}
@@ -228,6 +253,9 @@ export function InfiniteCanvas({ messages, children }: InfiniteCanvasProps) {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         {/* Background grid pattern */}
         <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_2px)] [background-size:16px_16px]" />
