@@ -389,40 +389,137 @@ export default function Admin() {
 
   if (!session) {
     return (
-      <div className="admin-container">
-        <form onSubmit={handleLogin} className="login-form">
-          <h2>Admin Login</h2>
-          {message && (
-            <p
-              className={
-                messageType === "error"
-                  ? "error"
-                  : messageType === "success"
-                    ? "status-message success"
-                    : "status-message"
-              }
-            >
-              {message}
+      <div className="flex min-h-[75vh] w-full items-center justify-center px-4 py-12">
+        <div className="w-full max-w-md overflow-hidden rounded-2xl border border-border-primary/80 bg-bg-secondary/40 p-8 shadow-2xl backdrop-blur-xl transition-all">
+          {/* Header & Icon */}
+          <div className="mb-8 text-center">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-indigo-500/20 bg-indigo-500/10 text-indigo-400 shadow-inner">
+              <svg
+                className="h-7 w-7"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.8"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
+                />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-bold tracking-tight text-text-primary">
+              Admin Portal
+            </h2>
+            <p className="mt-1 text-sm text-text-secondary">
+              Enter your credentials to manage resumes &amp; Beyond Dev
             </p>
+          </div>
+
+          {/* Feedback message */}
+          {message && (
+            <div
+              className={`mb-6 flex items-start gap-3 rounded-xl p-3.5 text-sm ${
+                messageType === "error"
+                  ? "border border-rose-500/20 bg-rose-500/10 text-rose-300"
+                  : messageType === "success"
+                    ? "border border-emerald-500/20 bg-emerald-500/10 text-emerald-300"
+                    : "border border-indigo-500/20 bg-indigo-500/10 text-indigo-300"
+              }`}
+            >
+              <span className="mt-0.5">
+                {messageType === "error" ? "⚠️" : messageType === "success" ? "✓" : "ℹ"}
+              </span>
+              <p className="flex-1">{message}</p>
+            </div>
           )}
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button type="submit" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
+
+          {/* Form */}
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label
+                htmlFor="admin-email"
+                className="mb-1.5 block text-xs font-medium text-text-secondary"
+              >
+                Email Address
+              </label>
+              <div className="relative">
+                <input
+                  id="admin-email"
+                  type="email"
+                  placeholder="admin@abhijitsatyaki.me"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full rounded-xl border border-border-primary/80 bg-bg-primary px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-secondary/50 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="admin-password"
+                className="mb-1.5 block text-xs font-medium text-text-secondary"
+              >
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  id="admin-password"
+                  type="password"
+                  placeholder="••••••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="w-full rounded-xl border border-border-primary/80 bg-bg-primary px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-secondary/50 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition-all hover:bg-indigo-500 hover:shadow-indigo-600/30 active:scale-[0.99] disabled:opacity-50"
+            >
+              {loading ? (
+                <>
+                  <svg
+                    className="h-4 w-4 animate-spin"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                  <span>Verifying credentials...</span>
+                </>
+              ) : (
+                <span>Sign In to Admin Portal →</span>
+              )}
+            </button>
+          </form>
+
+          {/* Back link */}
+          <div className="mt-6 text-center">
+            <Link
+              href="/"
+              className="text-xs font-medium text-text-secondary transition hover:text-text-primary"
+            >
+              ← Return to Portfolio
+            </Link>
+          </div>
+        </div>
       </div>
     );
   }
