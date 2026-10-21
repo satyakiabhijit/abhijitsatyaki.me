@@ -895,7 +895,7 @@ export default function Admin() {
                   </div>
 
                   {/* Photo Preview Link with Live Preview */}
-                  <div className="input-group">
+                  <div className="input-group beyond-form-full">
                     <label htmlFor="item-cover">Photo Preview / Cover URL:</label>
                     <input
                       id="item-cover"
