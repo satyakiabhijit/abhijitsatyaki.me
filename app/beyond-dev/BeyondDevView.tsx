@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import type { BeyondDevItem } from "@/app/lib/db/admin";
 
 interface Props {
@@ -88,6 +88,28 @@ interface SectionGroup {
 
 export function BeyondDevView({ items }: Props) {
   const [selectedSection, setSelectedSection] = useState<string>("All");
+  const [activeModalItem, setActiveModalItem] = useState<BeyondDevItem | null>(null);
+
+  // Lock body scroll and listen for Escape key when modal is open
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setActiveModalItem(null);
+      }
+    };
+
+    if (activeModalItem) {
+      document.body.style.overflow = "hidden";
+      window.addEventListener("keydown", handleKeyDown);
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    return () => {
+      document.body.style.overflow = "unset";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [activeModalItem]);
 
   // Collect unique sections in order of appearance
   const sections = useMemo(() => {
@@ -246,7 +268,11 @@ export function BeyondDevView({ items }: Props) {
                             <div>
                               {/* Photo / Cover Preview */}
                               {item.cover_image_url ? (
-                                <div className="relative mb-4 aspect-[4/3] w-full overflow-hidden rounded-xl border border-border-primary/50 bg-black/30">
+                                <div
+                                  onClick={() => setActiveModalItem(item)}
+                                  className="relative mb-4 aspect-[4/3] w-full overflow-hidden rounded-xl border border-border-primary/50 bg-black/30 cursor-pointer"
+                                  title="Click to read more & details"
+                                >
                                   {/* eslint-disable-next-line @next/next/no-img-element */}
                                   <img
                                     src={item.cover_image_url}
@@ -256,7 +282,11 @@ export function BeyondDevView({ items }: Props) {
                                   />
                                 </div>
                               ) : (
-                                <div className="relative mb-4 flex aspect-[4/3] w-full flex-col items-center justify-center rounded-xl border border-dashed border-indigo-500/20 bg-indigo-950/20 p-4 text-center">
+                                <div
+                                  onClick={() => setActiveModalItem(item)}
+                                  className="relative mb-4 flex aspect-[4/3] w-full flex-col items-center justify-center rounded-xl border border-dashed border-indigo-500/20 bg-indigo-950/20 p-4 text-center cursor-pointer"
+                                  title="Click to read more & details"
+                                >
                                   <svg
                                     className="h-10 w-10 text-indigo-400/60 transition-transform duration-300 group-hover:scale-110"
                                     fill="none"
@@ -290,7 +320,10 @@ export function BeyondDevView({ items }: Props) {
                                 )}
                               </div>
 
-                              <h3 className="text-lg font-semibold tracking-tight text-text-primary group-hover:text-indigo-300 transition-colors">
+                              <h3
+                                onClick={() => setActiveModalItem(item)}
+                                className="text-lg font-semibold tracking-tight text-text-primary group-hover:text-indigo-300 transition-colors cursor-pointer"
+                              >
                                 {item.title}
                               </h3>
 
@@ -300,10 +333,23 @@ export function BeyondDevView({ items }: Props) {
                                 </p>
                               )}
 
-                              {/* Description with HTML/Markdown formatting */}
+                              {/* Description with truncated preview and Read More */}
                               {item.description && (
                                 <div className="mt-3.5 border-t border-border-primary/40 pt-3">
-                                  {renderFormattedDescription(item.description)}
+                                  <p className="line-clamp-2 text-xs leading-relaxed text-text-secondary">
+                                    {item.description
+                                      .replace(/<[^>]*>/g, "")
+                                      .replace(/\[(.*?)\]\(.*?\)/g, "$1")
+                                      .replace(/[*_`#]/g, "")}
+                                  </p>
+                                  <button
+                                    type="button"
+                                    onClick={() => setActiveModalItem(item)}
+                                    className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors"
+                                  >
+                                    <span>Read more</span>
+                                    <span aria-hidden="true">→</span>
+                                  </button>
                                 </div>
                               )}
                             </div>
@@ -358,6 +404,144 @@ export function BeyondDevView({ items }: Props) {
           </div>
         );
       })}
+
+      {/* Detail / Read More Modal */}
+      {activeModalItem && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+        >
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/75 backdrop-blur-sm transition-opacity"
+            onClick={() => setActiveModalItem(null)}
+          />
+
+          {/* Modal Container */}
+          <div className="relative z-10 flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border-primary/80 bg-bg-primary shadow-2xl">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between border-b border-border-primary/40 px-6 py-4">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2.5 py-0.5 text-xs font-medium text-indigo-400">
+                  {activeModalItem.section}
+                </span>
+                {activeModalItem.subsection && (
+                  <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-300">
+                    {activeModalItem.subsection}
+                  </span>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveModalItem(null)}
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-border-primary/50 text-text-secondary transition hover:bg-bg-secondary hover:text-text-primary"
+                aria-label="Close modal"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Scrollable Modal Body */}
+            <div className="overflow-y-auto px-6 py-5 space-y-6">
+              {/* Cover image & Title info */}
+              <div className="flex flex-col sm:flex-row gap-5 items-start">
+                {activeModalItem.cover_image_url ? (
+                  <div className="h-44 w-32 flex-shrink-0 overflow-hidden rounded-xl border border-border-primary/60 bg-black/20 shadow-md">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={activeModalItem.cover_image_url}
+                      alt={activeModalItem.title}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="flex h-44 w-32 flex-shrink-0 flex-col items-center justify-center rounded-xl border border-dashed border-indigo-500/30 bg-indigo-950/20 text-center">
+                    <span className="text-3xl">📖</span>
+                  </div>
+                )}
+
+                <div className="flex-1 space-y-2.5">
+                  <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-text-primary">
+                    {activeModalItem.title}
+                  </h2>
+                  {activeModalItem.author && (
+                    <p className="text-sm font-medium text-text-secondary">
+                      by <span className="text-text-primary font-semibold">{activeModalItem.author}</span>
+                    </p>
+                  )}
+
+                  {/* Download button */}
+                  {activeModalItem.download_url && (
+                    <div className="pt-2">
+                      <a
+                        href={activeModalItem.download_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-semibold text-white shadow-md shadow-indigo-600/25 transition hover:bg-indigo-500 active:scale-[0.98]"
+                      >
+                        <svg
+                          className="h-4 w-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="2"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+                          />
+                        </svg>
+                        <span>Download / View PDF (Drive)</span>
+                        <svg
+                          className="h-3 w-3 opacity-70"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="2"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
+                          />
+                        </svg>
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Full Description / Takeaways */}
+              {activeModalItem.description && (
+                <div className="space-y-3 border-t border-border-primary/40 pt-4">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-indigo-400">
+                    Notes &amp; Takeaways
+                  </h4>
+                  <div className="rounded-xl border border-border-primary/40 bg-bg-secondary/30 p-4">
+                    {renderFormattedDescription(activeModalItem.description)}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="flex items-center justify-between border-t border-border-primary/40 bg-bg-secondary/20 px-6 py-3.5">
+              <span className="text-xs text-text-secondary">
+                Press <kbd className="rounded border border-border-primary/60 bg-bg-primary px-1.5 py-0.5 text-[10px] font-mono">ESC</kbd> to close
+              </span>
+              <button
+                type="button"
+                onClick={() => setActiveModalItem(null)}
+                className="rounded-xl border border-border-primary/60 bg-bg-primary px-4 py-1.5 text-xs font-semibold text-text-primary hover:bg-bg-secondary transition"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
