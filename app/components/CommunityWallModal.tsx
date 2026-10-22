@@ -1,34 +1,35 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createCommunityMessage } from "../lib/db";
+import { moderateCommunitySubmission } from "../lib/communityModeration";
 import { CreateCommunityNoteBuilder } from "./CreateCommunityNoteBuilder";
 
 async function handleCreateCommunityNote(formData: FormData) {
   "use server";
 
-  const message = formData.get("message") as string;
-  const patternIndex = parseInt((formData.get("patternIndex") as string) || "0", 10);
-  const rotation = parseFloat((formData.get("rotation") as string) || "0");
-  let creator_name = ((formData.get("creator_name") as string) || "").trim() || "Anonymous";
-  let creator_avatar_url = ((formData.get("creator_avatar_url") as string) || "").trim();
+  const message = String(formData.get("message") ?? "");
+  const rawPatternIndex = parseInt(String(formData.get("patternIndex") ?? "0"), 10);
+  const patternIndex = Number.isFinite(rawPatternIndex) ? Math.max(0, Math.min(20, rawPatternIndex)) : 0;
+  const rawRotation = parseFloat(String(formData.get("rotation") ?? "0"));
+  const rotation = Number.isFinite(rawRotation) ? Math.max(-10, Math.min(10, rawRotation)) : 0;
+  const creator_name = String(formData.get("creator_name") ?? "").trim() || "Anonymous";
 
-  if (!message || !message.trim()) return;
-
-  if (creator_name.startsWith("@")) {
-    const handle = creator_name.slice(1).trim();
-    if (!creator_avatar_url || creator_avatar_url.includes("dicebear")) {
-      creator_avatar_url = `https://github.com/${handle}.png`;
-    }
+  // Server-side moderation runs before the database insert. Client-side checks can be bypassed.
+  const moderation = moderateCommunitySubmission(creator_name, message);
+  if (!moderation.allowed) {
+    const error = moderation.reason === "abusive" ? "abusive" : moderation.reason === "length" ? "length" : "empty";
+    redirect(`/community-wall?show=true&error=${error}`);
   }
 
-  if (!creator_avatar_url) {
-    creator_avatar_url = `https://api.dicebear.com/7.x/thumbs/svg?seed=${encodeURIComponent(creator_name)}`;
-  }
+  // Build avatar URLs on the server instead of trusting a hidden form field.
+  const creator_avatar_url = creator_name.startsWith("@")
+    ? `https://github.com/${encodeURIComponent(creator_name.slice(1).trim())}.png`
+    : `https://api.dicebear.com/7.x/thumbs/svg?seed=${encodeURIComponent(creator_name)}`;
 
   await createCommunityMessage({
     message: message.trim(),
-    patternindex: isNaN(patternIndex) ? 0 : patternIndex,
-    rotation: isNaN(rotation) ? 0 : rotation,
+    patternindex: patternIndex,
+    rotation,
     creator_name,
     creator_avatar_url,
   });
@@ -39,10 +40,19 @@ async function handleCreateCommunityNote(formData: FormData) {
   redirect("/community-wall");
 }
 
-export async function CommunityWallModal() {
+export async function CommunityWallModal({ error }: { error?: string }) {
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden bg-black/80 backdrop-blur-md">
-      <div className="flex min-h-full items-center justify-center p-3 sm:p-6 py-8">
+      <div className="flex min-h-full flex-col items-center justify-center gap-3 p-3 py-8 sm:p-6">
+        {error ? (
+          <p role="alert" className="max-w-md rounded-lg border border-rose-400/40 bg-rose-950/80 px-4 py-3 text-center text-sm text-rose-100">
+            {error === "abusive"
+              ? "Please remove abusive or hateful language before posting your note."
+              : error === "length"
+                ? "Your name must be 35 characters or fewer and your note 200 characters or fewer."
+                : "Please enter your name and a message before posting."}
+          </p>
+        ) : null}
         <CreateCommunityNoteBuilder
           onSubmit={handleCreateCommunityNote}
           creator_name=""
