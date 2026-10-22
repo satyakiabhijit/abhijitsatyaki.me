@@ -135,17 +135,19 @@ export function ContributionGraphCard({
           </div>
           <div>
             <h2 className="font-medium text-text-primary">Contributions</h2>
-            <p className="text-sm text-text-secondary">Public · last 12 months</p>
+            <p className="text-sm text-text-secondary">All-time public contributions total</p>
           </div>
         </div>
         <div className="text-right">
           <span className="text-2xl font-semibold tracking-tight text-purple-primary">
             {displayCount.toLocaleString()}
           </span>
-          <p className="text-xs text-text-tertiary">contributions</p>
+          <p className="text-xs text-text-tertiary">contributions total</p>
         </div>
       </div>
 
+      {/* The headline is all-time; the heatmap below shows recent daily activity. */}
+      <p className="relative z-20 mb-1 text-xs text-text-tertiary">Daily activity · last 12 months</p>
       {/* Contribution graph container */}
       <div className="relative z-20 mt-2 flex-1">
         {/* Mobile: scrollable fixed-size grid */}
@@ -354,7 +356,7 @@ export function ContributionGraphCard({
           </motion.div>
           <div>
             <h2 className="font-medium text-text-primary">Contributions</h2>
-            <p className="text-sm text-text-secondary">Public · last 12 months</p>
+            <p className="text-sm text-text-secondary">All-time public contributions total</p>
           </div>
         </div>
         <motion.div
@@ -365,7 +367,7 @@ export function ContributionGraphCard({
           <span className="text-2xl font-semibold tracking-tight text-purple-primary">
             {displayCount.toLocaleString()}
           </span>
-          <p className="text-xs text-text-tertiary">contributions</p>
+          <p className="text-xs text-text-tertiary">contributions total</p>
         </motion.div>
       </div>
 
