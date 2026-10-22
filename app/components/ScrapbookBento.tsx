@@ -219,7 +219,7 @@ export function ScrapbookBento({ className }: { className?: string }) {
             <img
               width="90"
               src="/badges/holopin-achievement.webp"
-              className="xs:max-w-none max-w-[100px] drop-shadow-md"
+              className="w-[76px] max-w-full drop-shadow-md sm:w-[90px] sm:max-w-none"
               draggable={false}
               alt="Holopin Achievement Badge"
             />
