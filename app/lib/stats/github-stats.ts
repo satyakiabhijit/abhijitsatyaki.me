@@ -31,8 +31,32 @@ async function fetchContributionsPublic(): Promise<ContributionData | null> {
       weeks.push({ contributionDays: days.slice(i, i + 7) });
     }
 
-    const totalKey = Object.keys(data.total || {})[0];
-    const totalContributions = totalKey ? data.total[totalKey] : days.reduce((s, d) => s + d.contributionCount, 0);
+    // Keep the heatmap to the last 12 months, but show the all-time public total.
+    // This account's public contribution history starts in 2024.
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({ length: currentYear - 2024 + 1 }, (_, index) => 2024 + index);
+    const yearlyTotals = await Promise.all(
+      years.map(async (year) => {
+        if (year === currentYear) {
+          const currentYearTotal = Object.values(data.total || {}).reduce(
+            (sum: number, count: unknown) => sum + (typeof count === "number" ? count : 0),
+            0,
+          );
+          return currentYearTotal;
+        }
+        const yearRes = await fetch(
+          `https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}?y=${year}`,
+          { next: { revalidate: 86400 } },
+        );
+        if (!yearRes.ok) return 0;
+        const yearData = await yearRes.json();
+        return Object.values(yearData.total || {}).reduce(
+          (sum: number, count: unknown) => sum + (typeof count === "number" ? count : 0),
+          0,
+        );
+      }),
+    );
+    const totalContributions = yearlyTotals.reduce((sum, count) => sum + count, 0);
 
     return {
       totalContributions,
