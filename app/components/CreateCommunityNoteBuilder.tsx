@@ -178,32 +178,32 @@ export function CreateCommunityNoteBuilder({
           ))}
         </div>
 
-        {/* Actions: Cancel & Submit */}
-        <div className="flex h-9 items-center gap-2 rounded-full bg-dark-primary px-3 shadow">
-          <Link className="flex items-center justify-center" href="/community-wall">
-            <button
-              type="button"
-              className="text-rose-400 hover:text-rose-300 transition-colors p-0.5"
-              title="Cancel"
-            >
-              <svg className="h-4 w-4 xs:h-5 xs:w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          </Link>
-          <div className="h-4 w-[1px] bg-white/20" />
-          <button
-            type="submit"
-            disabled={!message.trim() || !author.trim()}
-            className="text-indigo-400 hover:text-indigo-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors p-0.5"
-            title="Post note"
-          >
-            <svg className="h-4 w-4 xs:h-5 xs:w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-          </button>
-        </div>
+        {/* Actions are fixed at the bottom of the screen while the editor is open. */}
+      </div>
+
+      <div className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom,0px))] left-1/2 z-[70] flex -translate-x-1/2 items-center gap-2 rounded-full border border-white/10 bg-[#292929]/95 p-2 shadow-2xl backdrop-blur-xl">
+        <Link
+          href="/community-wall"
+          aria-label="Close note editor"
+          className="flex h-12 min-w-24 items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold text-rose-300 transition-colors hover:bg-white/10"
+        >
+          <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <path d="M18 6 6 18M6 6l12 12" />
+          </svg>
+          <span>Close</span>
+        </Link>
+        <div className="h-7 w-px bg-white/20" />
+        <button
+          type="submit"
+          disabled={!message.trim() || !author.trim()}
+          className="flex h-12 min-w-24 items-center justify-center gap-2 rounded-full bg-indigo-500 px-5 text-sm font-semibold text-white transition-colors hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-40"
+          title="Post note"
+        >
+          <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          <span>Yes, post</span>
+        </button>
       </div>
     </form>
   );
