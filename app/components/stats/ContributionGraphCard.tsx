@@ -135,7 +135,7 @@ export function ContributionGraphCard({
           </div>
           <div>
             <h2 className="font-medium text-text-primary">Contributions</h2>
-            <p className="text-sm text-text-secondary">Last 12 months</p>
+            <p className="text-sm text-text-secondary">Public · last 12 months</p>
           </div>
         </div>
         <div className="text-right">
@@ -354,7 +354,7 @@ export function ContributionGraphCard({
           </motion.div>
           <div>
             <h2 className="font-medium text-text-primary">Contributions</h2>
-            <p className="text-sm text-text-secondary">Last 12 months</p>
+            <p className="text-sm text-text-secondary">Public · last 12 months</p>
           </div>
         </div>
         <motion.div
