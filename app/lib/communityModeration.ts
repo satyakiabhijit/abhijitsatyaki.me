@@ -19,7 +19,7 @@ function normalizeForModeration(value: string): string {
     .replace(/4|@/g, "a")
     .replace(/5|\$/g, "s")
     .replace(/7/g, "t")
-    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/[^a-z0-9\\s]/g, "")
     .trim()
     .replace(/\s+/g, " ");
 }
