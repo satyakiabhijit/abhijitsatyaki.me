@@ -206,7 +206,7 @@ export default function AboutPage() {
             <div className="lg:col-span-3 lg:row-span-6">
               <CurrentlyPlayingBento />
             </div>
-            <div className="hidden lg:col-span-7 lg:row-span-5 lg:block">
+            <div className="lg:col-span-7 lg:row-span-5">
               <ScrapbookBento />
             </div>
             <div className="hidden lg:col-span-2 lg:col-start-11 lg:row-span-10 lg:block lg:min-h-[50px]">
