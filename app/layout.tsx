@@ -12,7 +12,13 @@ import Script from "next/script";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteMetadata.siteUrl),
+  title: siteMetadata.title,
   description: siteMetadata.description,
+  icons: {
+    icon: "/abhijit_logo.svg",
+    shortcut: "/abhijit_logo.svg",
+    apple: "/abhijit_logo.svg",
+  },
   openGraph: {
     title: siteMetadata.title,
     description: siteMetadata.description,
@@ -94,4 +100,3 @@ export default function RootLayout({
     </html>
   );
 }
-
