@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createCommunityMessage } from "../lib/db";
@@ -43,7 +44,13 @@ async function handleCreateCommunityNote(formData: FormData) {
 export async function CommunityWallModal({ error }: { error?: string }) {
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden bg-black/80 backdrop-blur-md">
-      <div className="flex min-h-full flex-col items-center justify-center gap-3 p-3 py-8 sm:p-6">
+      <Link
+        href="/community-wall"
+        aria-label="Close note editor"
+        className="absolute inset-0 z-0 cursor-default"
+        tabIndex={-1}
+      />
+      <div className="relative z-10 flex min-h-full flex-col items-center justify-center gap-3 p-3 pb-24 pt-8 sm:p-6 sm:pb-24">
         {error ? (
           <p role="alert" className="max-w-md rounded-lg border border-rose-400/40 bg-rose-950/80 px-4 py-3 text-center text-sm text-rose-100">
             {error === "abusive"
