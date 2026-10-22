@@ -14,17 +14,20 @@ export const metadata: Metadata = {
 };
 
 type SearchParamProps = {
-  searchParams: Promise<{ show?: string }>;
+  searchParams: Promise<{ show?: string; error?: string }>;
 };
 
 export default async function Page({ searchParams }: SearchParamProps) {
   const messages = await getCommunityMessages();
   const resolvedParams = await searchParams;
   const show = resolvedParams.show === "true";
+  const moderationError = ["abusive", "length", "empty"].includes(resolvedParams.error || "")
+    ? resolvedParams.error
+    : undefined;
 
   return (
     <>
-      {show ? <CommunityWallModal /> : null}
+      {show ? <CommunityWallModal error={moderationError} /> : null}
 
       {/* Page Header */}
       <div className="mt-14 pb-8 md:mt-16">
