@@ -83,7 +83,8 @@ export default async function Page({ searchParams }: SearchParamProps) {
       </GridWrapper>
 
       {!show ? (
-        {/* Truly Fixed Floating Action Button (FAB) on mobile - placed outside any overflow container */}
+        <>
+          {/* Truly Fixed Floating Action Button (FAB) on mobile - placed outside any overflow container */}
         <div className="pointer-events-none fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom,0px))] inset-x-0 z-50 flex justify-center md:hidden px-4">
           <Link href="/community-wall?show=true" className="pointer-events-auto">
             <button
@@ -106,7 +107,8 @@ export default async function Page({ searchParams }: SearchParamProps) {
               <span>Leave a note</span>
             </button>
           </Link>
-        </div>
+          </div>
+        </>
       ) : null}
     </>
   );
