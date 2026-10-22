@@ -37,7 +37,7 @@ export function moderateCommunitySubmission(name: string, message: string): {
     return { allowed: false, reason: "length" };
   }
 
-  const normalized = normalizeForModeration(\`\${cleanName} \${cleanMessage}\`);
+  const normalized = normalizeForModeration(cleanName + " " + cleanMessage);
   const words = new Set(normalized.split(" "));
   const containsBlockedTerm = BLOCKED_TERMS.some((term) => words.has(term));
 
