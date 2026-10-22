@@ -37,13 +37,6 @@ async function fetchContributionsPublic(): Promise<ContributionData | null> {
     const years = Array.from({ length: currentYear - 2024 + 1 }, (_, index) => 2024 + index);
     const yearlyTotals = await Promise.all(
       years.map(async (year) => {
-        if (year === currentYear) {
-          const currentYearTotal = Object.values(data.total || {}).reduce(
-            (sum: number, count: unknown) => sum + (typeof count === "number" ? count : 0),
-            0,
-          );
-          return currentYearTotal;
-        }
         const yearRes = await fetch(
           `https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}?y=${year}`,
           { next: { revalidate: 86400 } },
