@@ -181,7 +181,7 @@ export function ScrapbookBento({ className }: { className?: string }) {
     <BentoCard
       colSpan={9}
       rowSpan={4}
-      height="h-[220px]"
+      height="h-[340px] sm:h-[220px]"
       showHoverGradient={false}
       hideOverflow={false}
     >
@@ -190,7 +190,7 @@ export function ScrapbookBento({ className }: { className?: string }) {
       <div
         key={resetIndex}
         className={cn(
-          "bg-secondary @container xs:max-h-none w-full rounded-3xl p-6",
+          "bg-secondary @container xs:max-h-none w-full rounded-3xl p-4 sm:p-6",
           className,
         )}
       >
@@ -198,7 +198,7 @@ export function ScrapbookBento({ className }: { className?: string }) {
           variants={container}
           initial="hidden"
           animate="shown"
-          className="-mt-8 grid h-full w-full grid-cols-4 items-center gap-4"
+          className="-mt-2 grid h-full w-full grid-cols-2 items-center gap-3 sm:-mt-8 sm:grid-cols-4 sm:gap-4"
         >
           <Sticker
             caption="Hacktoberfest 2025 Badge — active open-source contributor and builder!"
@@ -207,7 +207,7 @@ export function ScrapbookBento({ className }: { className?: string }) {
             <img
               width="90"
               src="/badges/hacktoberfest-2025.webp"
-              className="xs:max-w-none max-w-[100px] drop-shadow-md"
+              className="w-[76px] max-w-full drop-shadow-md sm:w-[90px] sm:max-w-none"
               draggable={false}
               alt="Hacktoberfest 2025 Badge"
             />
@@ -231,7 +231,7 @@ export function ScrapbookBento({ className }: { className?: string }) {
             <img
               width="95"
               src="/badges/kaggle-badge.svg"
-              className="drop-shadow-md"
+              className="w-[76px] max-w-full drop-shadow-md sm:w-[95px]"
               draggable={false}
               alt="Kaggle Badge"
             />
@@ -244,7 +244,7 @@ export function ScrapbookBento({ className }: { className?: string }) {
               width="130"
               src="/badges/tech-stack.svg"
               draggable={false}
-              className="xs:max-w-none drop-shadow-md"
+              className="w-[110px] max-w-full drop-shadow-md sm:w-[130px] sm:max-w-none"
               alt="Tech Stack Badge"
             />
           </Sticker>
