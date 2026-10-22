@@ -19,7 +19,8 @@ function normalizeForModeration(value: string): string {
     .replace(/4|@/g, "a")
     .replace(/5|\$/g, "s")
     .replace(/7/g, "t")
-    .replace(/[^a-z0-9\\s]/g, "")
+    // Remove punctuation inside words (e.g. f.u.c.k) but preserve spaces between words.
+    .replace(/[^a-z0-9\s]/g, "")
     .trim()
     .replace(/\s+/g, " ");
 }
@@ -36,12 +37,9 @@ export function moderateCommunitySubmission(name: string, message: string): {
     return { allowed: false, reason: "length" };
   }
 
-  const normalized = normalizeForModeration(`${cleanName} ${cleanMessage}`);
+  const normalized = normalizeForModeration(\`\${cleanName} \${cleanMessage}\`);
   const words = new Set(normalized.split(" "));
-  const containsBlockedTerm = BLOCKED_TERMS.some((term) => {
-    // Match complete words to avoid blocking harmless words containing a substring.
-    return words.has(term);
-  });
+  const containsBlockedTerm = BLOCKED_TERMS.some((term) => words.has(term));
 
   if (containsBlockedTerm) return { allowed: false, reason: "abusive" };
   return { allowed: true };
