@@ -43,8 +43,8 @@ async function fetchContributionsPublic(): Promise<ContributionData | null> {
         );
         if (!yearRes.ok) return 0;
         const yearData = await yearRes.json();
-        return Object.values(yearData.total || {}).reduce(
-          (sum: number, count: unknown) => sum + (typeof count === "number" ? count : 0),
+        return Object.values(yearData.total || {}).reduce<number>(
+          (sum, count) => sum + (typeof count === "number" ? count : 0),
           0,
         );
       }),
