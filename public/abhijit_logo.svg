@@ -1,4 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none">
-  <rect width="40" height="40" rx="10" fill="#6366F1"/>
-  <text x="50%" y="50%" text-anchor="middle" dy="0.35em" fill="white" font-family="system-ui,-apple-system,sans-serif" font-weight="700" font-size="18">AS</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1256 1256" width="512" height="512">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+  <rect x="85" y="85" width="1085" height="1085" rx="230" fill="#fff" filter="url(#shadow)"/>
+  <path fill="#0b0b0b" d="M492 356 L725 765 C640 765 580 730 530 660 C500 615 480 570 450 540 C430 522 410 516 398 518 Z"/>
+  <path fill="#0b0b0b" d="M187 880 L377 560 C400 540 430 540 455 558 C480 578 495 605 515 640 C560 710 620 765 710 765 L862 767 C910 765 940 735 940 710 C940 670 905 648 862 648 L770 648 C690 648 630 590 630 515 C630 430 700 372 780 372 L1033 372 L970 458 L775 458 C745 458 722 482 722 515 C722 545 745 565 775 565 L875 565 C980 565 1046 640 1046 710 C1046 800 970 880 880 880 L712 880 C640 880 600 840 565 785 C540 745 520 710 498 675 C485 655 470 645 455 642 C435 640 425 655 415 670 L292 880 Z"/>
 </svg>

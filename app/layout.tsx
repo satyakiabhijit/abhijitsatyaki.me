@@ -12,24 +12,44 @@ import Script from "next/script";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteMetadata.siteUrl),
+  title: siteMetadata.title,
   description: siteMetadata.description,
+  alternates: {
+    canonical: "/",
+  },
+  icons: {
+    icon: "/abhijit_logo.svg",
+    shortcut: "/abhijit_logo.svg",
+    apple: "/abhijit_logo.svg",
+  },
   openGraph: {
+    type: "website",
+    url: "/",
+    siteName: siteMetadata.title,
     title: siteMetadata.title,
     description: siteMetadata.description,
+    locale: siteMetadata.locale,
     images: [
       {
-        url: "/abhijit_og.jpg", // Your default OG image
+        url: "/abhijit_og.jpg",
         width: 1200,
         height: 630,
-        alt: siteMetadata.title,
+        alt: "Abhijit Satyaki — Full Stack Developer and Researcher",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
+    site: siteMetadata.twitterHandle,
+    creator: siteMetadata.twitterHandle,
     title: siteMetadata.title,
     description: siteMetadata.description,
-    images: ["/abhijit_og.jpg"],
+    images: [
+      {
+        url: "/abhijit_og.jpg",
+        alt: "Abhijit Satyaki — Full Stack Developer and Researcher",
+      },
+    ],
   },
 };
 
@@ -94,4 +114,3 @@ export default function RootLayout({
     </html>
   );
 }
-
